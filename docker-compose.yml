@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  nginx:
+    build:
+      context: services/nginx
+      dockerfile: Dockerfile
+    container_name: nginx-${PROJECT_NAME}
+    restart: always
+    volumes:
+      - ./:/var/www
+      - ./services/nginx/logs:/var/log/nginx
+      - ./services/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - ${NGINX_PORT}:80
+    env_file:
+      - ./.env
+    networks:
+      - default
+
+  client:
+    build:
+      context: .
+      dockerfile: services/client/Dockerfile
+    container_name: client-${PROJECT_NAME}
+    restart: unless-stopped
+    volumes:
+      - ./client:/var/www/client
+      - /var/www/client/node_modules
+    env_file:
+      - ./.env
+    networks:
+      - default
+
+  server:
+    build:
+      context: .
+      dockerfile: services/server/Dockerfile
+    container_name: server-${PROJECT_NAME}
+    restart: unless-stopped
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - CONTAINER=API
+      - APP_PATH=/usr/src/app
+    env_file:
+      - ./.env
+    networks:
+      - default
+
+  db:
+    build:
+      context: services/db
+      dockerfile: Dockerfile
+    container_name: db-${PROJECT_NAME}
+    restart: unless-stopped
+    volumes:
+      - ./services/db/data:/data/db
+    ports:
+      - ${DB_PORT}:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    env_file:
+      - ./.env
+    networks:
+      - default
+
+volumes:
+  mongo:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

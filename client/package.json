@@ -1,0 +1,29 @@
+{
+  "name": "client",
+  "description": "Proc client",
+  "author": "ivglad",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.19",
+    "vue-router": "^4.2.5",
+    "pinia": "^2.1.7",
+    "@tanstack/vue-query": "^5.22.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.4",
+    "sass": "^1.70.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -1,0 +1,50 @@
+@use '@/assets/styles/colors' as *
+@use '@/assets/styles/fonts' as *
+
+// Offsets
+$offset-3xl: 5.0rem
+$offset-2xl: 5.0rem
+$offset-xl: 5.0rem
+$offset-l: 4.0rem
+$offset-m: 1.5rem
+$offset-s: 1.0rem
+$offset-xs: 0.5rem
+$offset-2xs: 0.5rem
+$offset-3xs: 0.5rem
+
+// Radius
+$radius-default: 14px
+$button-radius: 5px
+$line-radius: 1px
+
+// Hover
+@mixin hover()
+  @media (hover: none)
+    -webkit-tap-highlight-color: transparent
+    &:active
+      @content
+  @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+    &:hover
+      @content
+
+// Media query
+@mixin mq($breakpoint)
+  @if($breakpoint == wide)
+    @media (max-width: 2400px)
+      @content
+  @if($breakpoint == large)
+    @media (max-width: 1800px)
+      @content
+  @if($breakpoint == medium)
+    @media (max-width: 1200px)
+      @content
+  @if($breakpoint == small)
+    @media (max-width: 600px)
+      @content
+
+// Background blur
+@mixin background-blur()
+  box-shadow: 0 0 calc($offset-m * 1.0) $offset-m $background-color-default
+
+::selection
+  background: $select-color

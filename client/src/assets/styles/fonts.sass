@@ -1,0 +1,25 @@
+@use '@/assets/styles/colors' as *
+
+@mixin font-face($weight, $fileName)
+  @font-face
+    font-family: 'Exo2'
+    font-weight: $weight
+    font-style: normal
+    font-display: auto
+    unicode-range: U+000-5FF
+    src: local('Exo2'), url('/fonts/Exo2/#{$fileName}.woff2') format('woff2')
+
+@include font-face(400, 'Exo2-Regular')
+@include font-face(300, 'Exo2-Light')
+@include font-face(200, 'Exo2-ExtraLight')
+
+@mixin font($size: 16px, $weight: 300)
+  font-family: 'Exo2'
+  font-size: $size
+  font-weight: $weight
+
+$font-size-title: 3rem
+$font-size-base: 1.6rem
+$font-size-small: 1.3rem
+$font-size-base-button: 1.4rem
+$padding-bottom: .048rem
