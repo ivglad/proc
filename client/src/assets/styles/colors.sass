@@ -1,14 +1,24 @@
 :root
-  --background-gradient-default: radial-gradient(farthest-corner at 50% -10%, rgb(36, 36, 36, 0), rgb(36, 36, 36)), linear-gradient(180deg, rgb(36, 36, 36, 0), rgb(36, 36, 36)), linear-gradient(80deg, rgb(70, 103, 116), rgb(92, 86, 68), rgb(94, 60, 60)), #242424
-  --text-color-default: #ffffff
-  --select-color: #494949
+  --background-main: radial-gradient(farthest-corner at 50% -10%, rgb(36, 36, 36, 0), rgb(36, 36, 36)), linear-gradient(180deg, rgb(36, 36, 36, 0), rgb(36, 36, 36)), linear-gradient(80deg, rgb(70, 103, 116), rgb(92, 86, 68), rgb(94, 60, 60)), rgb(36, 36, 36)
+  --select-color: rgba(120, 206, 255, 0.2)
+  --text-color-default: rgba(217, 217, 217, 1)
+  --text-color-active: rgba(120, 206, 255, 1)
+  --background-default: rgba(217, 217, 217, 0.05)
+  --background-active: rgba(120, 206, 255, 0.1)
+  --background-input: rgba(36, 36, 36, 0.15)
+  --border-color: rgba(217, 217, 217, 0.1)
+  --border-color-active: rgba(120, 206, 255, 0.2)
+  --border-color-input: rgba(217, 217, 217, 0.08)
 
-[theme="dark"]
-  --background-color-default: #242424
-  --text-color-default: #ffffff
-  --select-color: #c7c7c7
+// [theme="dark"]
 
-$background-gradient-default: var(--background-gradient-default)
-$background-color-default: var(--background-color-default)
-$text-color-default: var(--text-color-default)
+$background-main: var(--background-main)
 $select-color: var(--select-color)
+$text-color-default: var(--text-color-default)
+$text-color-active: var(--text-color-active)
+$background-default: var(--background-default)
+$background-active: var(--background-active)
+$background-input: var(--background-input)
+$border-color: var(--border-color)
+$border-color-active: var(--border-color-active)
+$border-color-input: var(--border-color-input)

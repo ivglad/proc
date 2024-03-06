@@ -1,14 +1,11 @@
-@use '@/assets/styles/fonts' as *
-@use '@/assets/styles/common' as *
-
-@mixin transition-leave($property: all, $duration: 0.15s, $timing-function: ease-in, $delay: 0.0s)
+@mixin transition($property: all, $duration: 0.15s, $timing-function: cubic-bezier(0.45, 0, 0.55, 1), $delay: 0.0s)
   transition: $property $duration $timing-function $delay
 
-@mixin transition-enter($property: all, $duration: 0.1s, $timing-function: ease-out, $delay: 0.0s)
-  @include transition-leave($property, $duration, $timing-function, $delay)
+@mixin transition-enter($property: all, $duration: 0.1s, $timing-function: cubic-bezier(0.65, 0, 0.35, 1), $delay: 0.0s)
+  @include transition($property, $duration, $timing-function, $delay)
 
 .group-fade-item
-  @include transition-leave
+  @include transition
 .group-fade-enter-from,
 .group-fade-leave-to
   opacity: 0
@@ -18,15 +15,15 @@
   opacity: 0
   transform: translateY(1rem)
 .group-fade-move
-  @include transition-leave
+  @include transition
 
 .list-fade-enter-active
   @include transition-enter
 .list-fade-leave-active
-  @include transition-leave
+  @include transition
 .list-fade-enter-from
   opacity: 0
-  transform: translateY(-$offset-xs)
+  transform: translateY(-10px)
 .list-fade-leave-to
   opacity: 0
-  transform: translateY(calc($offset-xs / -1.5))
+  transform: translateY(-10px)

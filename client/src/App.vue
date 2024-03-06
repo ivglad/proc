@@ -1,57 +1,57 @@
 <template>
   <header></header>
   <main>
-    <section>
-      <router-view />
-    </section>
+    <router-view />
   </main>
+  <footer></footer>
 </template>
 
 <script setup></script>
 
-<style lang="sass" module>
+<style lang="sass">
 
 html
-  width: 100vw
-  height: 100vh
-  font-size: 62.5%
-  line-height: 100%
-
-body
   @include font
   width: 100vw
   height: 100vh
+  font-size: 100%
+  color: $text-color-default
+  line-height: 120%
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  text-rendering: optimizeLegibility
+  background: $background-main
+
+body
+  width: 100%
+  height: 100%
   margin: 0
   padding: 0
-  box-sizing: border-box
-  color: $text-color-default
-  background: $background-gradient-default
 
   #app
     display: flex
     flex-direction: column
+    align-items: center
+    justify-content: center
     position: relative
     width: 100%
     height: 100%
     overflow-x: hidden
 
     header
+      position: fixed
       display: flex
       align-content: center
       justify-content: center
-      position: absolute
       width: 100%
       bottom: 0
       z-index: 100
 
     main
       display: flex
-      padding: $offset-l
-      position: relative
+      width: 100%
+      height: 100%
+      align-items: center
+      justify-content: center
       overflow: hidden
-
-      .content
-        display: flex
-        flex-direction: column
-        margin-left: $offset-l
 </style>

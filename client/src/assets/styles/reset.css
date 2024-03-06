@@ -60,8 +60,10 @@ body {
   */
 
 h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
+  display: flex;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
 }
 
 /* Grouping content

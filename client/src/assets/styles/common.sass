@@ -1,16 +1,17 @@
 @use '@/assets/styles/colors' as *
 @use '@/assets/styles/fonts' as *
+@use '@/assets/styles/animations' as *
 
 // Offsets
-$offset-3xl: 5.0rem
-$offset-2xl: 5.0rem
-$offset-xl: 5.0rem
-$offset-l: 4.0rem
-$offset-m: 1.5rem
-$offset-s: 1.0rem
-$offset-xs: 0.5rem
-$offset-2xs: 0.5rem
-$offset-3xs: 0.5rem
+$offset-3xl: 120px
+$offset-2xl: 100px
+$offset-xl: 80px
+$offset-l: 60px
+$offset-m: 40px
+$offset-s: 30px
+$offset-xs: 20px
+$offset-2xs: 10px
+$offset-3xs: 5px
 
 // Radius
 $radius-default: 14px
@@ -42,9 +43,52 @@ $line-radius: 1px
     @media (max-width: 600px)
       @content
 
-// Background blur
-@mixin background-blur()
-  box-shadow: 0 0 calc($offset-m * 1.0) $offset-m $background-color-default
+@mixin background()
+  position: relative
+  border-radius: $radius-default
+  backdrop-filter: blur(80px)
+  box-shadow: 0px 0px 0.4px 1px $border-color
+  background: $background-default
+
+@mixin background-button()
+  @include transition
+  @include background
+  backdrop-filter: none
+  &:hover,
+  &:focus,
+  &:focus-visible
+    color: $text-color-active
+    box-shadow: 0px 0px 0.4px 1px $border-color-active
+    background: $background-active
+
+@mixin background-button-inline()
+  @include transition
+  backdrop-filter: none
+  background: transparent
+  &:hover,
+  &:focus,
+  &:focus-visible
+    background: transparent
+
+@mixin background-input()
+  @include transition
+  @include background
+  backdrop-filter: none
+  box-shadow: 0px 0px 0.4px 1px $border-color-input
+  background: $background-input
+  &:hover,
+  &:focus,
+  &:focus-visible
+    box-shadow: 0px 0px 0.4px 1px $border-color-active
 
 ::selection
   background: $select-color
+
+button,
+input,
+textarea
+  @include font
+  outline: none
+  border: none
+  background: none
+  color: $text-color-default
