@@ -11,25 +11,33 @@ const props = defineProps({
   },
   type: {
     type: String,
+    default: 'button',
+  },
+  styleType: {
+    type: String,
     default: '',
   },
 })
 
 const classes = computed(() => {
   return {
-    button: true,
-    'button--inline': props.type === 'inline',
+    'button--inline': props.styleType === 'inline',
   }
 })
 </script>
 
 <template>
-  <button :class="classes" @click.prevent="">{{ title }}</button>
+  <Transition name="blur" mode="out-in" :key="title" appear>
+    <button :type="type" class="button" :class="classes" @click.prevent>
+      {{ title }}
+    </button>
+  </Transition>
 </template>
 
 <style lang="sass" scoped>
 .button
   @include background-button
+  @include transition
   display: flex
   align-items: center
   justify-content: center
@@ -43,6 +51,8 @@ const classes = computed(() => {
   color: $text-color-default
   user-select: none
   text-wrap: nowrap
+  &:hover
+    @include transition-enter
   &--inline
     @include background-button-inline
 </style>

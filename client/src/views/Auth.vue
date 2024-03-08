@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue'
-import TheHome from '@/components/TheHome.vue'
+import TheAuth from '@/components/TheAuth.vue'
 
 components: {
-  TheHome
+  TheAuth
 }
 </script>
 
 <template>
-  <TheHome />
+  <TheAuth />
 </template>
 
 <style lang="sass" scoped></style>

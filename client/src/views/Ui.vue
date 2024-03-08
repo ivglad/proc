@@ -1,14 +1,14 @@
 <script setup>
-  import { ref } from 'vue'
-  import UiComponent from '../components/UiComponent.vue'
+import { ref } from 'vue'
+import TheUi from '@/components/TheUi.vue'
 
-  components: {
-    UiComponent
-  }
+components: {
+  TheUi
+}
 </script>
 
 <template>
-  <UiComponent />
+  <TheUi />
 </template>
 
 <style lang="sass" scoped></style>

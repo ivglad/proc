@@ -48,41 +48,46 @@ $line-radius: 1px
   border-radius: $radius-default
   backdrop-filter: blur(80px)
   box-shadow: 0px 0px 0.4px 1px $border-color
+  // filter: drop-shadow(0px 0px 0.4px 1px $border-color)
   background: $background-default
 
 @mixin background-button()
-  @include transition
   @include background
   backdrop-filter: none
   &:hover,
-  &:focus,
-  &:focus-visible
+  &:focus
     color: $text-color-active
     box-shadow: 0px 0px 0.4px 1px $border-color-active
+    // filter: drop-shadow(0px 0px 0.4px 1px $border-color-active)
     background: $background-active
 
 @mixin background-button-inline()
-  @include transition
   backdrop-filter: none
   background: transparent
   &:hover,
-  &:focus,
-  &:focus-visible
+  &:focus
     background: transparent
 
 @mixin background-input()
-  @include transition
   @include background
   backdrop-filter: none
   box-shadow: 0px 0px 0.4px 1px $border-color-input
+  // filter: drop-shadow(0px 0px 0.4px 1px $border-color-input)
   background: $background-input
   &:hover,
-  &:focus,
-  &:focus-visible
+  &:focus
     box-shadow: 0px 0px 0.4px 1px $border-color-active
+    // filter: drop-shadow(0px 0px 0.4px 1px $border-color-active)
 
 ::selection
   background: $select-color
+
+*,
+::before,
+::after
+  // backface-visibility: hidden
+  // transform: translateZ(0) scale(1.0, 1.0)
+  // transform: translateZ(0)
 
 button,
 input,

@@ -1,29 +1,35 @@
-@mixin transition($property: all, $duration: 0.15s, $timing-function: cubic-bezier(0.45, 0, 0.55, 1), $delay: 0.0s)
+@mixin transition($duration: 0.2s, $delay: 0.0s, $timing-function: cubic-bezier(0.45, 0, 0.55, 1), $property: all)
+  backface-visibility: hidden
+  transform-origin: 50% 50%
+  transform-style: preserve-3d
+  transform: perspective(1px) translate3d(0, 0, 0)
   transition: $property $duration $timing-function $delay
 
-@mixin transition-enter($property: all, $duration: 0.1s, $timing-function: cubic-bezier(0.65, 0, 0.35, 1), $delay: 0.0s)
-  @include transition($property, $duration, $timing-function, $delay)
+@mixin transition-enter($duration: 0.15s, $delay: 0.0s, $timing-function: cubic-bezier(0.65, 0, 0.35, 1), $property: all)
+  @include transition($duration, $delay, $timing-function, $property)
 
-.group-fade-item
-  @include transition
-.group-fade-enter-from,
-.group-fade-leave-to
-  opacity: 0
-  transform: translateY(1rem)
-.group-fade-leave-active
-  position: absolute !important
-  opacity: 0
-  transform: translateY(1rem)
-.group-fade-move
-  @include transition
-
-.list-fade-enter-active
+.blur-move,
+.blur-enter-active
   @include transition-enter
-.list-fade-leave-active
+.blur-leave-active
   @include transition
-.list-fade-enter-from
+.blur-enter-from,
+.blur-leave-to
   opacity: 0
-  transform: translateY(-10px)
-.list-fade-leave-to
+  transform: translate3d(0, 0, -0.2px)
+  filter: blur(10px)
+  // position: absolute
+.blur-leave-active
+  // position: absolute
+
+.transform-move,
+.transform-enter-active
+  @include transition-enter
+.transform-leave-active
+  @include transition
+.transform-enter-from,
+.transform-leave-to
   opacity: 0
-  transform: translateY(-10px)
+  transform: translate3d(0, 0, -0.2px)
+.transform-leave-active
+  // position: absolute

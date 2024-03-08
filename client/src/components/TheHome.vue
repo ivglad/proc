@@ -1,21 +1,19 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
-import ButtonComponent from './ui/ButtonComponent.vue'
 
 components: {
-  ButtonComponent
 }
 </script>
 
 <template>
-  <div class="ui">
-    <ButtonComponent />
-  </div>
+  <div class="home"></div>
 </template>
 
 <style lang="sass" scoped>
-
-.ui
+.home
   display: flex
-  padding: $offset-l
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: 100%
 </style>
