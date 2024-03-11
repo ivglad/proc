@@ -1,9 +1,20 @@
 @mixin transition($duration: 0.2s, $delay: 0.0s, $timing-function: cubic-bezier(0.45, 0, 0.55, 1), $property: all)
   backface-visibility: hidden
   transform-origin: 50% 50%
-  transform-style: preserve-3d
   transform: perspective(1px) translate3d(0, 0, 0)
   transition: $property $duration $timing-function $delay
+  // &::before,
+  //   content: ''
+  //   position: fixed
+  //   top: 0
+  //   left: 0
+  //   width: 100vw
+  //   height: 100vh
+  //   backdrop-filter: blur(10px)
+    // backface-visibility: hidden
+    // transform-origin: 50% 50%
+    // transform: perspective(1px) translate3d(0, 0, 0)
+    // transition: $property $duration $timing-function $delay
 
 @mixin transition-enter($duration: 0.15s, $delay: 0.0s, $timing-function: cubic-bezier(0.65, 0, 0.35, 1), $property: all)
   @include transition($duration, $delay, $timing-function, $property)
@@ -11,25 +22,55 @@
 .blur-move,
 .blur-enter-active
   @include transition-enter
+  // backdrop-filter: none
+  // opacity: 1
 .blur-leave-active
   @include transition
+  // opacity: 0
 .blur-enter-from,
 .blur-leave-to
   opacity: 0
-  transform: translate3d(0, 0, -0.2px)
+  transform: translate3d(0, 0, -0.1px)
+    // opacity: 0
+  // position: relative
+  // opacity: 0
+  // backface-visibility: hidden
   filter: blur(10px)
+  // filter: opacity(0)
+  // backdrop-filter: opacity(0)
+  // backdrop-filter: none
   // position: absolute
+  // mix-blend-mode: overlay
+  // backdrop-filter: opacity(0) blur(-1px)
+  // &::after
+  //   z-index: 100
+  //   content: ''
+  //   position: fixed
+  //   inset: 0
+  //   top: 0
+  //   left: 0
+  //   width: 100vw
+  //   height: 100vh
+  // // //   // backdrop-filter: opacity(0)
+  // // //   z-index: 100
+  // // //   // mix-blend-mode: overlay
+  // // //   // opacity: 0
+  // // //   // display: none
+  // // //   background: rgba(0, 0, 0, 0.9)
+  //   filter: blur(10px)
+  //   // backdrop-filter: blur(10px)
+  //   z-index: 100
 .blur-leave-active
   // position: absolute
 
 .transform-move,
 .transform-enter-active
-  @include transition-enter
+  @include transition-enter(0.9s)
 .transform-leave-active
-  @include transition
+  @include transition(0.9s)
 .transform-enter-from,
 .transform-leave-to
   opacity: 0
-  transform: translate3d(0, 0, -0.2px)
+  // transform: translate3d(0, 0, -0.2px)
 .transform-leave-active
   // position: absolute

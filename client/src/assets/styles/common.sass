@@ -43,51 +43,79 @@ $line-radius: 1px
     @media (max-width: 600px)
       @content
 
-@mixin background()
+// @mixin background()
+//   border-radius: $radius-default
+//   box-shadow: 0px 0px 0.4px 1px $border-color
+//   // background: rgba(56, 58, 61, 0.95)
+
+// @mixin  background-blur()
+//   border-radius: $radius-default
+//   box-shadow: 0px 0px 0.4px 1px $border-color
+//   background: $background-default
+
+// @mixin background-button()
+//   @include background
+//   background: rgba(36, 36, 36, 0.95)
+
+// @mixin background-button-inline()
+//   background: transparent
+
+// @mixin background-input()
+
+// @mixin background-input-error()
+
+@mixin background($type: default, $blur: 0)
   position: relative
   border-radius: $radius-default
-  backdrop-filter: blur(80px)
   box-shadow: 0px 0px 0.4px 1px $border-color
-  // filter: drop-shadow(0px 0px 0.4px 1px $border-color)
   background: $background-default
+  @if $type == default
+    @if $blur != 0
+      backdrop-filter: blur(#{$blur}px)
+  @if $type == blur
+    &::before
+      content: ''
+      position: absolute
+      inset: 0
+      backdrop-filter: blur(#{$blur}px)
+      border-radius: $radius-default
+      z-index: -1
 
-@mixin background-button()
-  @include background
-  backdrop-filter: none
+@mixin background-button($type: default, $blur: 0)
+  @include background($type, $blur)
   &:hover,
   &:focus
     color: $text-color-active
     box-shadow: 0px 0px 0.4px 1px $border-color-active
-    // filter: drop-shadow(0px 0px 0.4px 1px $border-color-active)
     background: $background-active
 
-@mixin background-button-inline()
-  backdrop-filter: none
+@mixin background-button-inline($type: default, $blur: 0)
+  @include background($type, $blur)
   background: transparent
   &:hover,
   &:focus
     background: transparent
 
-@mixin background-input()
-  @include background
-  backdrop-filter: none
+@mixin background-input($type: default, $blur: 0)
+  @include background($type, $blur)
   box-shadow: 0px 0px 0.4px 1px $border-color-input
-  // filter: drop-shadow(0px 0px 0.4px 1px $border-color-input)
   background: $background-input
+  // background: rgba(58, 58, 58, 1)
   &:hover,
   &:focus
     box-shadow: 0px 0px 0.4px 1px $border-color-active
-    // filter: drop-shadow(0px 0px 0.4px 1px $border-color-active)
+
+@mixin background-input-error($type: default, $blur: 0)
+  @include background($type, $blur)
+  box-shadow: 0px 0px 0.4px 1px $border-color-error
+  background: $background-input
+  // background: rgb(59, 59, 59)
+  &:hover,
+  &:focus
+    box-shadow: 0px 0px 0.4px 1px $border-color-error
 
 ::selection
   background: $select-color
-
-*,
-::before,
-::after
-  // backface-visibility: hidden
-  // transform: translateZ(0) scale(1.0, 1.0)
-  // transform: translateZ(0)
 
 button,
 input,

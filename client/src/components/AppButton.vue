@@ -36,7 +36,7 @@ const classes = computed(() => {
 
 <style lang="sass" scoped>
 .button
-  @include background-button
+  @include background-button()
   @include transition
   display: flex
   align-items: center

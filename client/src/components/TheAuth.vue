@@ -10,16 +10,37 @@ components: {
 }
 
 const signupData = ref({
-  email: '',
-  password: '',
-  passwordConfirm: '',
-  username: '',
-  name: '',
+  email: {
+    value: '',
+    errors: [],
+  },
+  password: {
+    value: '',
+    errors: [],
+  },
+  passwordConfirm: {
+    value: '',
+    errors: [],
+  },
+  username: {
+    value: '',
+    errors: [],
+  },
+  name: {
+    value: '',
+    errors: [],
+  },
 })
 
 const signinData = ref({
-  email: '',
-  password: '',
+  email: {
+    value: '',
+    errors: ['Некорректный email'],
+  },
+  password: {
+    value: '',
+    errors: [],
+  },
 })
 
 const formState = ref('signin')
@@ -28,15 +49,76 @@ const changeForm = () => {
   formState.value = formState.value === 'signin' ? 'signup' : 'signin'
 }
 
-const signupDataValid = () => {}
+const validator = (data) => {
+  let valid = true
+  const checkErrors = (key) => {
+    const value = data[key].value
+    let errors = data[key].errors
+    if (value === '') {
+      errors.push('Поле не может быть пустым')
+      valid = false
+      return
+    }
+    if (key === 'email') {
+      const pattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+      if (!pattern.test(value)) {
+        errors.push('Некорректный email')
+        valid = false
+      }
+    }
+    if (key === 'password') {
+      if (value.length < 6) {
+        errors.push('Пароль должен быть более 6 символов')
+        valid = false
+      }
+    }
+    if (key === 'passwordConfirm') {
+      if (data['password'].value !== value) {
+        errors.push('Пароли не совпадают')
+        valid = false
+      }
+    }
+    if (key === 'username') {
+      if (value.length < 2) {
+        errors.push('Никнейм должен быть более 2 символов')
+        valid = false
+      }
+    }
+    if (key === 'name') {
+      if (value.length < 2) {
+        errors.push('Имя должно быть более 2 символов')
+        valid = false
+      }
+    }
+  }
+
+  const keys = Object.keys(data)
+  keys.forEach((key) => {
+    data[key].errors = []
+  })
+  keys.forEach((key) => {
+    checkErrors(key)
+  })
+
+  return valid
+}
 
 const signUp = async () => {
-  if (!signupDataValid) return
-  const request = await axios.post('/api/auth/signup', signupData.value)
+  if (!validator(signupData.value)) return false
+  const request = await axios.post('/api/auth/signup', {
+    email: signupData.value.email.value,
+    password: signupData.value.password.value,
+    username: signupData.value.username.value,
+    name: signupData.value.name.value,
+  })
 }
 
 const signIn = async () => {
-  const request = await axios.post('/api/auth/signin', signinData.value)
+  if (!validator(signinData.value)) return false
+  const request = await axios.post('/api/auth/signin', {
+    email: signinData.value.email.value,
+    password: signinData.value.password.value,
+  })
 }
 </script>
 
@@ -51,15 +133,19 @@ const signIn = async () => {
         <span class="title-separator">или</span>
         <span
           :class="[formState === 'signup' ? 'title-active' : 'title-inactive']">
-          Зарегистрируйтесь
+          зарегистрируйтесь
         </span>
       </div>
-      <Transition name="transform" mode="out-in" appear>
-        <form v-if="formState === 'signin'" class="form">
+      <Transition name="blur" mode="out-in">
+        <form v-if="formState === 'signin'" class="form" key="signin">
           <div class="inputs">
-            <AppInput v-model="signinData.email" placeholder="Email" />
             <AppInput
-              v-model="signinData.password"
+              v-model="signinData.email.value"
+              v-model:errors="signinData.email.errors"
+              placeholder="Email" />
+            <AppInput
+              v-model="signinData.password.value"
+              v-model:errors="signinData.password.errors"
               type="password"
               placeholder="Пароль" />
           </div>
@@ -73,19 +159,30 @@ const signIn = async () => {
             <AppButton class="signin-button" title="Вход" @click="signIn" />
           </div>
         </form>
-        <form v-else-if="formState === 'signup'" class="form">
+        <form v-else-if="formState === 'signup'" class="form" key="signun">
           <div class="inputs">
-            <AppInput v-model="signupData.email" placeholder="Email" />
             <AppInput
-              v-model="signupData.password"
+              v-model="signupData.email.value"
+              v-model:errors="signupData.email.errors"
+              placeholder="Email" />
+            <AppInput
+              v-model="signupData.password.value"
+              v-model:errors="signupData.password.errors"
               type="password"
               placeholder="Пароль" />
             <AppInput
-              v-model="signupData.passwordConfirm"
+              v-model="signupData.passwordConfirm.value"
+              v-model:errors="signupData.passwordConfirm.errors"
               type="password"
               placeholder="Пароль еще раз" />
-            <AppInput v-model="signupData.username" placeholder="Никнейм" />
-            <AppInput v-model="signupData.name" placeholder="Ваше имя" />
+            <AppInput
+              v-model="signupData.username.value"
+              v-model:errors="signupData.username.errors"
+              placeholder="Никнейм" />
+            <AppInput
+              v-model="signupData.name.value"
+              v-model:errors="signupData.name.errors"
+              placeholder="Ваше имя" />
           </div>
           <div class="buttons">
             <AppButton
@@ -119,8 +216,7 @@ const signIn = async () => {
   flex-direction: column
   gap: $offset-m
   &-wrap
-    @include transition
-    @include background
+    @include background(blur, 80)
     display: flex
     flex-direction: column
     gap: $offset-m
@@ -128,7 +224,10 @@ const signIn = async () => {
     min-width: 400px
     .title
       display: flex
-      flex-direction: column
+      flex-wrap: wrap
+      gap: 0 5px
+      span:first-child
+        width: 100%
       &-active
         @include transition
         color: $text-color-active
