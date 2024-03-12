@@ -2,7 +2,7 @@
 import { ref, reactive, computed, watch } from 'vue'
 import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
-import axios from 'axios'
+import { useSignupUser, useSigninUser } from '@/services/queries'
 
 components: {
   AppButton
@@ -35,7 +35,7 @@ const signupData = ref({
 const signinData = ref({
   email: {
     value: '',
-    errors: ['Некорректный email'],
+    errors: [],
   },
   password: {
     value: '',
@@ -103,22 +103,56 @@ const validator = (data) => {
   return valid
 }
 
-const signUp = async () => {
-  if (!validator(signupData.value)) return false
-  const request = await axios.post('/api/auth/signup', {
-    email: signupData.value.email.value,
-    password: signupData.value.password.value,
-    username: signupData.value.username.value,
-    name: signupData.value.name.value,
-  })
+const signinUserMutation = useSigninUser()
+const signin = async () => {
+  if (!validator(signinData.value)) return false
+  signinUserMutation.mutate(
+    {
+      email: signinData.value.email.value,
+      password: signinData.value.password.value,
+    },
+    {
+      onError: (error, variables, context) => {
+        const errorMessage =
+          error.response.data && error.response.data.message
+            ? error.response.data.message
+            : error.message
+
+        if (errorMessage.indexOf('пароль') >= 0) {
+          signinData.value.password.errors.push(errorMessage)
+        } else {
+          signinData.value.email.errors.push(errorMessage)
+        }
+      },
+    },
+  )
 }
 
-const signIn = async () => {
-  if (!validator(signinData.value)) return false
-  const request = await axios.post('/api/auth/signin', {
-    email: signinData.value.email.value,
-    password: signinData.value.password.value,
-  })
+const signupUserMutation = useSignupUser()
+const signup = async () => {
+  if (!validator(signupData.value)) return false
+  signupUserMutation.mutate(
+    {
+      email: signupData.value.email.value,
+      password: signupData.value.password.value,
+      username: signupData.value.username.value,
+      name: signupData.value.name.value,
+    },
+    {
+      onError: (error, variables, context) => {
+        const errorMessage =
+          error.response.data && error.response.data.message
+            ? error.response.data.message
+            : error.message
+
+        if (errorMessage.indexOf('никнейм') >= 0) {
+          signupData.value.username.errors.push(errorMessage)
+        } else {
+          signupData.value.email.errors.push(errorMessage)
+        }
+      },
+    },
+  )
 }
 </script>
 
@@ -156,7 +190,7 @@ const signIn = async () => {
               title="Регистрация"
               styleType="inline"
               @click="changeForm" />
-            <AppButton class="signin-button" title="Вход" @click="signIn" />
+            <AppButton class="signin-button" title="Вход" @click="signin" />
           </div>
         </form>
         <form v-else-if="formState === 'signup'" class="form" key="signun">
@@ -194,7 +228,7 @@ const signIn = async () => {
               class="signup-button"
               type="submit"
               title="Отправить"
-              @click="signUp" />
+              @click="signup" />
           </div>
         </form>
       </Transition>
@@ -216,7 +250,7 @@ const signIn = async () => {
   flex-direction: column
   gap: $offset-m
   &-wrap
-    @include background(blur, 80)
+    @include background(blur, 20)
     display: flex
     flex-direction: column
     gap: $offset-m

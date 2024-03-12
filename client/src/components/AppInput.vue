@@ -29,11 +29,6 @@ const inputClasses = computed(() => {
 })
 
 const showInfo = ref(false)
-const infoClasses = computed(() => {
-  return {
-    'info-show': props.errors.length > 0,
-  }
-})
 </script>
 
 <template>
@@ -46,22 +41,19 @@ const infoClasses = computed(() => {
           v-model.trim="model"
           @focus="$emit('update:errors', [])" />
       </label>
-      <!-- <Transition name="blur"> -->
       <div
         class="info"
+        :class="{ 'show-info': showInfo }"
         @mouseenter="showInfo = true"
         @mouseleave="showInfo = false"
         v-if="props.errors.length">
-        <Transition name="blur" mode="out-in">
-          <div class="info-errors" v-show="showInfo">
-            <span v-for="error in props.errors" :key="error">
-              {{ error }}
-            </span>
-          </div>
-        </Transition>
+        <div class="info-errors" v-show="showInfo">
+          <span v-for="error in props.errors" :key="error">
+            {{ error }}
+          </span>
+        </div>
         <div class="info-icon">!</div>
       </div>
-      <!-- </Transition> -->
     </div>
   </Transition>
 </template>
@@ -78,11 +70,10 @@ const infoClasses = computed(() => {
       width: 100%
       height: 46px
       .info
-        @include background(blur, 20)
-        @include transition
         position: absolute
         content: ""
         right: 0
+        height: 100%
         display: flex
         align-items: center
         justify-content: end
@@ -91,35 +82,29 @@ const infoClasses = computed(() => {
         user-select: none
         padding: 0 15px
         &-errors
-          // @include background(blur, 20)
-          @include transition
           display: flex
           flex-direction: column
+          align-items: center
+          justify-content: center
+          height: 100%
           font-size: 12px
-          padding: 12px 0 15px 15px
+          padding: 0px 10px 0px 0px
           color: $text-color-error
         &-icon
           font-size: 14px
           font-weight: bold
           color: $text-color-error
-          // margin: 0 15px
 
-        &:hover
-
-      .info-show
-        @include background(blur, 20)
-        @include background-input-error
-        @include transition-enter
+      .show-info
+        @include background(default, 20)
         position: absolute
-        content: ""
-        right: 0
 
   input
     @include background-input
     @include transition
     width: 100%
     height: 100%
-    padding: 12px 15px 15px 15px
+    padding: 12px 35px 15px 15px
     &:hover
       @include transition-enter
 
