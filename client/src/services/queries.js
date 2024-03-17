@@ -1,10 +1,10 @@
-import axios from 'axios'
+import api from '@/services/api'
 import { useMutation } from '@tanstack/vue-query'
 
 export const useSignupUser = () => {
   return useMutation({
     mutationFn: (data) => {
-      return axios.post('/api/auth/signup', data)
+      return api.post('/api/auth/signup', data)
     },
     onMutate: (variables) => {},
     onError: (error, variables, context) => {},
@@ -16,7 +16,7 @@ export const useSignupUser = () => {
 export const useSigninUser = () => {
   return useMutation({
     mutationFn: (data) => {
-      return axios.post('/api/auth/signin', data)
+      return api.post('/api/auth/signin', data)
     },
     onMutate: (variables) => {},
     onError: (error, variables, context) => {},
@@ -28,7 +28,7 @@ export const useSigninUser = () => {
 export const useLogoutUser = () => {
   return useMutation({
     mutationFn: (data) => {
-      return axios.post('/api/auth/logout', data)
+      return api.post('/api/auth/logout', data)
     },
     onMutate: (variables) => {},
     onError: (error, variables, context) => {},
@@ -39,11 +39,25 @@ export const useLogoutUser = () => {
 
 export const useRefreshUser = () => {
   return useMutation({
-    mutationFn: (data) => {
-      return axios.post('/api/auth/refresh', data)
+    mutationFn: () => {
+      return api.get('/api/auth/refresh')
     },
     onMutate: (variables) => {},
     onError: (error, variables, context) => {},
+    onSuccess: (data, variables, context) => {},
+    onSettled: (data, error, variables, context) => {},
+  })
+}
+
+export const useGetUsers = () => {
+  return useMutation({
+    mutationFn: () => {
+      return api.get('/api/users')
+    },
+    onMutate: (variables) => {},
+    onError: (error, variables, context) => {
+      // console.log('useGetUsers', error)
+    },
     onSuccess: (data, variables, context) => {},
     onSettled: (data, error, variables, context) => {},
   })

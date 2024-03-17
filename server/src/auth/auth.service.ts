@@ -40,7 +40,10 @@ export class AuthService {
 
     const tokens = await this.getTokens(newUser._id, newUser.email)
     await this.updateRefreshToken(newUser._id, tokens.refreshToken)
-    return tokens
+    return {
+      username: newUser.username,
+      name: newUser.name,
+    }
   }
 
   async signIn(data: AuthDto) {
@@ -55,7 +58,12 @@ export class AuthService {
     }
     const tokens = await this.getTokens(user._id, user.email)
     await this.updateRefreshToken(user._id, tokens.refreshToken)
-    return tokens
+    return {
+      username: user.username,
+      name: user.name,
+      role: user.role,
+      ...tokens,
+    }
   }
 
   async logout(userId: string) {
@@ -80,7 +88,7 @@ export class AuthService {
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,
-          expiresIn: '15m',
+          expiresIn: '1m',
         },
       ),
       this.jwtService.signAsync(

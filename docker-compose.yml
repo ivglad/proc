@@ -60,6 +60,7 @@ services:
     ports:
       - ${DB_PORT}:27017
     environment:
+      MONGO_DATA_DIR: /data/db
       MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     env_file:
@@ -68,7 +69,7 @@ services:
       - default
 
 volumes:
-  mongo:
+  db:
     driver: local
 
 networks:

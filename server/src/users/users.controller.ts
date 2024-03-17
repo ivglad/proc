@@ -23,6 +23,7 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AccessTokenGuard)
   findAll() {
     return this.usersService.findAll()
   }

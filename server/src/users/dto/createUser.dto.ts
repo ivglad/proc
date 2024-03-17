@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsJWT, IsString } from 'class-validator'
+import { IsNotEmpty, IsEmail, IsJWT, IsString, IsDate } from 'class-validator'
 export class CreateUserDto {
   @IsNotEmpty()
   username: string
@@ -17,4 +17,10 @@ export class CreateUserDto {
 
   @IsString()
   role?: string
+
+  @IsDate()
+  createdAt?: Date
+
+  @IsDate()
+  updatedAt?: Date
 }

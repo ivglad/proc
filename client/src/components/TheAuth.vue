@@ -1,13 +1,19 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/authStore'
+import { useSignupUser, useSigninUser } from '@/services/queries'
 import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
-import { useSignupUser, useSigninUser } from '@/services/queries'
 
 components: {
   AppButton
   AppInput
 }
+
+const authStore = useAuthStore()
+
+const router = useRouter()
 
 const signupData = ref({
   email: {
@@ -93,9 +99,13 @@ const validator = (data) => {
   }
 
   const keys = Object.keys(data)
-  keys.forEach((key) => {
-    data[key].errors = []
-  })
+  const clearErrors = () => {
+    keys.forEach((key) => {
+      data[key].errors = []
+    })
+  }
+  clearErrors()
+
   keys.forEach((key) => {
     checkErrors(key)
   })
@@ -106,13 +116,14 @@ const validator = (data) => {
 const signinUserMutation = useSigninUser()
 const signin = async () => {
   if (!validator(signinData.value)) return false
+
   signinUserMutation.mutate(
     {
       email: signinData.value.email.value,
       password: signinData.value.password.value,
     },
     {
-      onError: (error, variables, context) => {
+      onError: (error) => {
         const errorMessage =
           error.response.data && error.response.data.message
             ? error.response.data.message
@@ -124,6 +135,10 @@ const signin = async () => {
           signinData.value.email.errors.push(errorMessage)
         }
       },
+      onSuccess: (data) => {
+        authStore.user = data.data
+        router.push('/')
+      },
     },
   )
 }
@@ -131,6 +146,7 @@ const signin = async () => {
 const signupUserMutation = useSignupUser()
 const signup = async () => {
   if (!validator(signupData.value)) return false
+
   signupUserMutation.mutate(
     {
       email: signupData.value.email.value,
@@ -139,7 +155,7 @@ const signup = async () => {
       name: signupData.value.name.value,
     },
     {
-      onError: (error, variables, context) => {
+      onError: (error) => {
         const errorMessage =
           error.response.data && error.response.data.message
             ? error.response.data.message
@@ -150,6 +166,13 @@ const signup = async () => {
         } else {
           signupData.value.email.errors.push(errorMessage)
         }
+      },
+      onSuccess: (data) => {
+        signinData.email.value = ''
+        signinData.email.errors = []
+        signinData.password.value = ''
+        signinData.password.errors = []
+        formState.value = 'signin'
       },
     },
   )
