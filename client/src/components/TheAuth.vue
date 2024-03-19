@@ -124,10 +124,9 @@ const signin = async () => {
     },
     {
       onError: (error) => {
-        const errorMessage =
-          error.response.data && error.response.data.message
-            ? error.response.data.message
-            : error.message
+        const errorMessage = error.response?.data?.message
+          ? error.response.data.message
+          : error.message
 
         if (errorMessage.indexOf('пароль') >= 0) {
           signinData.value.password.errors.push(errorMessage)
@@ -156,10 +155,9 @@ const signup = async () => {
     },
     {
       onError: (error) => {
-        const errorMessage =
-          error.response.data && error.response.data.message
-            ? error.response.data.message
-            : error.message
+        const errorMessage = error.response?.data?.message
+          ? error.response.data.message
+          : error.message
 
         if (errorMessage.indexOf('никнейм') >= 0) {
           signupData.value.username.errors.push(errorMessage)
@@ -168,10 +166,10 @@ const signup = async () => {
         }
       },
       onSuccess: (data) => {
-        signinData.email.value = ''
-        signinData.email.errors = []
-        signinData.password.value = ''
-        signinData.password.errors = []
+        signinData.value.email.value = ''
+        signinData.value.email.errors = []
+        signinData.value.password.value = ''
+        signinData.value.password.errors = []
         formState.value = 'signin'
       },
     },

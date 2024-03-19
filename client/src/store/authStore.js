@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { ref, watch } from 'vue'
-import { useSignupUser, useSigninUser } from '@/services/queries'
+import router from '@/router/index'
 
 export const useAuthStore = defineStore('authStore', () => {
   const getUserFromLocalStorage = () => {
@@ -17,9 +17,16 @@ export const useAuthStore = defineStore('authStore', () => {
     localStorage.setItem('user', JSON.stringify(user.value))
   }
 
+  const watchUserState = () => {
+    setUserToLocalStorage()
+    if (!user.value) {
+      router.push('/auth')
+    }
+  }
+
   const user = ref(getUserFromLocalStorage())
 
-  watch(user, setUserToLocalStorage, { deep: true })
+  watch(user, watchUserState, { deep: true })
 
   return { user }
 })

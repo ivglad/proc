@@ -27,8 +27,13 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
   const user = authStore.user
+
   if (!user && to.path !== '/auth') {
     return '/auth'
+  }
+
+  if (user && to.path === '/auth') {
+    return '/'
   }
 })
 
