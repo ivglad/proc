@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import TheHome from '@/components/TheHome.vue'
-import { useGetUsers } from '@/services/queries'
+import { ref, reactive, computed, watch } from 'vue'
+import { useGetUsers } from '@/helpers/queries'
+import AppControlPanel from '@/components/AppControlPanel.vue'
 
 components: {
-  TheHome
+  AppControlPanel
 }
 
 const getUsersMutation = useGetUsers()
@@ -19,7 +19,16 @@ getUsersMutation.mutate({
 </script>
 
 <template>
-  <TheHome />
+  <div class="home">
+    <AppControlPanel />
+  </div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.home
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: 100%
+</style>

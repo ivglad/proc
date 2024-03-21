@@ -1,0 +1,7 @@
+<svg width="46" height="46" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="18" width="2" height="16" rx="1" fill="currentColor"/>
+  <ellipse cx="31" cy="17.5" rx="5" ry="6.5" fill="currentColor"/>
+  <path d="M15 12a1 1 0 1 1 2 0v21a1 1 0 1 1-2 0V12z" fill="currentColor"/>
+  <path d="M12 12v5.913a2 2 0 0 0 .295 1.046l2 3.26c.78 1.273 2.63 1.273 3.41 0l2-3.26A2 2 0 0 0 20 17.913V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>

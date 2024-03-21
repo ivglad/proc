@@ -1,4 +1,4 @@
-import api from '@/services/api'
+import api from '@/helpers/api'
 import { useMutation } from '@tanstack/vue-query'
 
 export const useSignupUser = () => {

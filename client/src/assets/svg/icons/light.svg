@@ -1,0 +1,11 @@
+<svg width="46" height="46" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <path d="m29.573 24.12-.94 2.82a5.937 5.937 0 0 1-11.265 0l-.94-2.82C14.931 19.632 18.27 15 23 15s8.068 4.633 6.573 9.12z" stroke="currentColor" stroke-width="2"/>
+  <rect x="20" y="30" width="6" height="6" rx="2" fill="currentColor"/>
+  <rect x="22" y="34" width="2" height="3" rx="1" fill="currentColor"/>
+  <rect x="22" y="8" width="2" height="4" rx="1" fill="currentColor"/>
+  <rect x="12.5" y="12.91" width="2" height="4" rx="1" transform="rotate(-45 12.5 12.91)" fill="currentColor"/>
+  <rect x="9" y="23" width="2" height="4" rx="1" transform="rotate(-90 9 23)" fill="currentColor"/>
+  <rect x="32.33" y="11.5" width="2" height="4" rx="1" transform="rotate(45 32.33 11.5)" fill="currentColor"/>
+  <rect x="37" y="21" width="2" height="4" rx="1" transform="rotate(90 37 21)" fill="currentColor"/>
+</svg>

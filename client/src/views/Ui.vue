@@ -1,14 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-import TheUi from '@/components/TheUi.vue'
+import { ref, reactive, computed, watch } from 'vue'
+import AppButton from '@/components/AppButton.vue'
 
 components: {
-  TheUi
+  AppButton
 }
 </script>
 
 <template>
-  <TheUi />
+  <div class="ui">
+    <AppButton />
+  </div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+
+.ui
+  display: flex
+  padding: $offset-l
+</style>
