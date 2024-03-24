@@ -14,9 +14,7 @@ html
   @include font
   width: 100vw
   height: 100vh
-  font-size: 100%
   color: $text-color-default
-  line-height: 120%
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-rendering: optimizeLegibility

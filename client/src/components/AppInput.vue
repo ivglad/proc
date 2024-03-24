@@ -32,30 +32,30 @@ const showInfo = ref(false)
 </script>
 
 <template>
-  <Transition name="blur" mode="out-in" :key="placeholder" appear>
-    <div class="input-wrap">
-      <label class="input" :class="inputClasses">
-        <input
-          :type="type"
-          :placeholder="placeholder"
-          v-model.trim="model"
-          @focus="$emit('update:errors', [])" />
-      </label>
-      <div
-        class="info"
-        :class="{ 'show-info': showInfo }"
-        @mouseenter="showInfo = true"
-        @mouseleave="showInfo = false"
-        v-if="props.errors.length">
-        <div class="info-errors" v-show="showInfo">
-          <span v-for="error in props.errors" :key="error">
-            {{ error }}
-          </span>
-        </div>
-        <div class="info-icon">!</div>
+  <!-- <Transition name="blur" mode="out-in" :key="placeholder" appear> -->
+  <div class="input-wrap">
+    <label class="input" :class="inputClasses">
+      <input
+        :type="type"
+        :placeholder="placeholder"
+        v-model.trim="model"
+        @focus="$emit('update:errors', [])" />
+    </label>
+    <div
+      class="info"
+      :class="{ 'show-info': showInfo }"
+      @mouseenter="showInfo = true"
+      @mouseleave="showInfo = false"
+      v-if="props.errors.length">
+      <div class="info-errors" v-show="showInfo">
+        <span v-for="error in props.errors" :key="error">
+          {{ error }}
+        </span>
       </div>
+      <div class="info-icon">!</div>
     </div>
-  </Transition>
+  </div>
+  <!-- </Transition> -->
 </template>
 
 <style lang="sass" scoped>

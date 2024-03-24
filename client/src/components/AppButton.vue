@@ -27,11 +27,11 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <Transition name="blur" mode="out-in" :key="title" appear>
-    <button :type="type" class="button" :class="classes" @click.prevent>
-      {{ title }}
-    </button>
-  </Transition>
+  <!-- <Transition name="blur" mode="out-in" :key="title" appear> -->
+  <button :type="type" class="button" :class="classes" @click.prevent>
+    {{ title }}
+  </button>
+  <!-- </Transition> -->
 </template>
 
 <style lang="sass" scoped>
