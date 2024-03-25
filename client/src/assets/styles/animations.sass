@@ -1,5 +1,5 @@
 @mixin transition($duration: 0.2s, $delay: 0.0s, $timing-function: cubic-bezier(0.45, 0, 0.55, 1), $property: all)
-  backface-visibility: hidden
+  // backface-visibility: hidden
   transform-origin: 50% 50%
   // transform: perspective(1px) translate3d(0, 0, 0)
   transition: $property $duration $timing-function $delay
@@ -9,15 +9,15 @@
 
 .blur-move,
 .blur-enter-active
-  @include transition-enter
+  @include transition-enter(0.1s)
 .blur-leave-active
-  @include transition
+  @include transition(0.15s)
   // opacity: 0
 .blur-enter-from,
 .blur-leave-to
-  opacity: 0
-  transform: translate3d(0, 0, -0.1px)
-  filter: blur(10px)
+  opacity: 0.2
+  // transform: translate3d(0, 0, -0.1px)
+  filter: blur(5px)
 .blur-leave-active
   // position: absolute
 

@@ -12,7 +12,7 @@ const props = defineProps({
   },
   size: {
     type: Number,
-    default: 36,
+    default: 38,
   },
   bg: {
     type: Boolean,
@@ -50,10 +50,10 @@ const classes = computed(() => {
   display: flex
   align-items: center
   justify-content: center
-  width: 40px
-  height: 40px
-  min-width: 40px
-  min-height: 40px
+  width: 42px
+  height: 42px
+  min-width: 42px
+  min-height: 42px
   padding: 0
   &:hover
     @include transition-enter

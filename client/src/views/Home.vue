@@ -1,10 +1,10 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { useGetUsers } from '@/helpers/queries'
-import AppControlPanel from '@/components/AppControlPanel.vue'
+import ControlPanel from '@/components/ControlPanel.vue'
 
 components: {
-  AppControlPanel
+  ControlPanel
 }
 
 const getUsersMutation = useGetUsers()
@@ -20,7 +20,7 @@ getUsersMutation.mutate({
 
 <template>
   <div class="home">
-    <AppControlPanel />
+    <ControlPanel />
   </div>
 </template>
 

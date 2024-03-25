@@ -92,11 +92,12 @@ const changePlayer = () => {
           position: absolute
           top: 0
           right: 0
-          transform: rotate(90deg) translate(-16%, -34%)
+          transform: rotate(90deg) translate(-18%, -38%)
+          transform-origin: 50%
       .line
         position: relative
         width: 100%
-        height: 4px
+        height: 3px
         border-radius: 2px
         background: $element-color-inactive
         &-progress
@@ -109,7 +110,7 @@ const changePlayer = () => {
           background: $element-color-default
 
       .time
-        @include font(13px)
+        @include font(0.8125rem)
         display: flex
         gap: $offset-4xs
         width: 100%
@@ -132,7 +133,13 @@ const changePlayer = () => {
     padding: $offset-3xs $offset-xs
     cursor: default
     .show-player-button
-      transform: rotate(-90deg) translate(-16%, -34%)
+      transform: rotate(-90deg) translate(18%, 34%) !important
+    .title
+      @include font(1.25rem)
+    .time
+      span
+        @include font
+        color: $text-color-default !important
 
 .play-info
 </style>

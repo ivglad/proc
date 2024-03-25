@@ -19,30 +19,27 @@ const mainPlayer = ref(false)
         <AppIcon name="films" type="button" />
         <AppIcon name="food" type="button" />
       </div>
-      <div class="center-block">
-        <Transition name="blur" mode="out-in">
-          <Player
-            v-if="!mainPlayer"
-            type="info"
-            v-model:mainPlayer="mainPlayer" />
-          <Player
-            v-else
-            class="main-player"
-            v-model:mainPlayer="mainPlayer" />
-        </Transition>
+      <!-- <Transition name="blur" mode="out-in"> -->
+      <div class="center-block" v-if="!mainPlayer">
+        <Player
+          v-if="!mainPlayer"
+          type="info"
+          v-model:mainPlayer="mainPlayer" />
+        <!-- <Player v-else class="main-player" v-model:mainPlayer="mainPlayer" /> -->
       </div>
+      <!-- </Transition> -->
       <div class="third-block">
         <AppIcon name="cart" type="button" />
       </div>
     </section>
-    <!-- <section class="second-section">
-      <Transition name="blur" mode="out-in">
-        <Player
-          v-if="mainPlayer"
-          v-model:mainPlayer="mainPlayer"
-          @click="mainPlayer = false" />
-      </Transition>
-    </section> -->
+    <section class="second-section">
+      <!-- <Transition name="blur" mode="out-in"> -->
+      <Player
+        v-if="mainPlayer"
+        class="main-player"
+        v-model:mainPlayer="mainPlayer" />
+      <!-- </Transition> -->
+    </section>
   </nav>
 </template>
 
@@ -53,24 +50,26 @@ const mainPlayer = ref(false)
   bottom: $offset-2xs
   display: flex
   align-items: center
-  width: clamp(50vw, 90%, 1920px)
+  width: clamp(50vw, 92%, 1920px)
+  @include mq(xs)
+    width: 100%
 
   .main-section
     display: flex
     align-items: center
     justify-content: space-between
     flex-wrap: wrap
-    gap: $offset-xs $offset-xs
+    gap: $offset-2xs $offset-xs
     padding: $offset-3xs $offset-xs
     width: 100%
-    min-height: 70px
 
     div
       display: flex
+      align-items: center
       flex: 0 1 auto
-      gap: $offset-3xs
-      // height: 100%
+      gap: 0 $offset-3xs
     .first-block
+      min-height: 48px
       @include mq(s)
         order: 2
     .center-block
@@ -83,7 +82,6 @@ const mainPlayer = ref(false)
         bottom: calc(100% + $offset-3xs)
         display: flex
         width: 100%
-        transition-duration: 0.1s
     .third-block
       @include mq(s)
         order: 3

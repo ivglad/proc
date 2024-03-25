@@ -11,20 +11,23 @@
 <style lang="sass">
 
 html
-  @include font
   width: 100vw
   height: 100vh
+
+body
+  @include font
+  width: 100%
+  min-width: 320px
+  height: 100%
+  margin: 0
+  padding: 0
   color: $text-color-default
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-rendering: optimizeLegibility
   background: $background-main
+  overflow-x: hidden
 
-body
-  width: 100%
-  height: 100%
-  margin: 0
-  padding: 0
 
   #app
     display: flex
@@ -33,8 +36,10 @@ body
     justify-content: center
     position: relative
     width: 100%
+    min-width: 320px
     height: 100%
     overflow-x: hidden
+
 
     header
       position: fixed

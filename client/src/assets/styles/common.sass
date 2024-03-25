@@ -46,6 +46,9 @@ $line-radius: 1px
   @else if($size == s)
     @media (max-width: 576px)
       @content
+  @else if($size == xs)
+    @media (max-width: 320px)
+      @content
   @else
     @media (max-width: #{$size}px)
       @content
