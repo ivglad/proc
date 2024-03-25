@@ -28,8 +28,7 @@ const mainPlayer = ref(false)
           <Player
             v-else
             class="main-player"
-            v-model:mainPlayer="mainPlayer"
-            @click="mainPlayer = false" />
+            v-model:mainPlayer="mainPlayer" />
         </Transition>
       </div>
       <div class="third-block">
@@ -84,6 +83,7 @@ const mainPlayer = ref(false)
         bottom: calc(100% + $offset-3xs)
         display: flex
         width: 100%
+        transition-duration: 0.1s
     .third-block
       @include mq(s)
         order: 3

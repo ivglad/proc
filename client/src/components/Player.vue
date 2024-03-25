@@ -15,7 +15,6 @@ const props = defineProps({
 const emit = defineEmits(['update:mainPlayer'])
 
 const changePlayer = () => {
-  if (props.type === 'player') return
   emit('update:mainPlayer', !props.mainPlayer)
 }
 </script>
@@ -31,7 +30,6 @@ const changePlayer = () => {
         <div class="title">
           <span>Грань будущего</span>
           <AppIcon
-            v-if="props.type === 'info'"
             class="show-player-button"
             name="back"
             type="button"
@@ -69,7 +67,6 @@ const changePlayer = () => {
     gap: $offset-xs $offset-xs
     width: 100%
     padding: 0
-    cursor: pointer
 
     div
       display: flex
@@ -86,6 +83,7 @@ const changePlayer = () => {
       flex: 1 0 max-content
       gap: $offset-4xs
       user-select: none
+      cursor: pointer
       @include mq(s)
         flex: 1 0 100%
       .title
@@ -133,6 +131,8 @@ const changePlayer = () => {
     @include background(default, 80)
     padding: $offset-3xs $offset-xs
     cursor: default
+    .show-player-button
+      transform: rotate(-90deg) translate(-16%, -34%)
 
 .play-info
 </style>
