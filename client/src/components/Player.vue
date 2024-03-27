@@ -135,10 +135,8 @@ const changePlayer = () => {
     .show-player-button
       transform: rotate(-90deg) translate(18%, 34%) !important
     .title
-      @include font(1.25rem)
     .time
       span
-        @include font
         color: $text-color-default !important
 
 .play-info

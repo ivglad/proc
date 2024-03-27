@@ -1,10 +1,8 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { useGetUsers } from '@/helpers/queries'
-import ControlPanel from '@/components/ControlPanel.vue'
 
 components: {
-  ControlPanel
 }
 
 const getUsersMutation = useGetUsers()
@@ -19,9 +17,7 @@ getUsersMutation.mutate({
 </script>
 
 <template>
-  <div class="home">
-    <ControlPanel />
-  </div>
+  <div class="home"></div>
 </template>
 
 <style lang="sass" scoped>

@@ -1,12 +1,23 @@
+<script setup>
+import { useAuthStore } from '@/store/authStore'
+import ControlPanel from '@/components/ControlPanel.vue'
+
+components: {
+  ControlPanel
+}
+
+const authStore = useAuthStore()
+</script>
+
 <template>
-  <header></header>
+  <header>
+    <ControlPanel v-if="authStore.user" />
+  </header>
   <main>
     <router-view />
   </main>
   <footer></footer>
 </template>
-
-<script setup></script>
 
 <style lang="sass">
 

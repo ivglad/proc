@@ -135,7 +135,13 @@ const signin = async () => {
         }
       },
       onSuccess: (data) => {
-        authStore.user = data.data
+        const userData = data.data
+        authStore.user = userData
+
+        // if (userData.role === 'vip') {
+        //   router.push('/vip')
+        //   return
+        // }
         router.push('/')
       },
     },
