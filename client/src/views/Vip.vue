@@ -44,6 +44,7 @@ import { ref } from 'vue'
     @include background(default, 80)
     display: flex
     flex-direction: column
+    padding: $offset-xs
     // flex: 1 1 40%
     // max-width: 40%
     // width: 100%
@@ -53,8 +54,11 @@ import { ref } from 'vue'
       max-width: 450px
       height: 100%
       max-height: 580px
+      border: 1px solid transparent
+      border-radius: $radius-default
       img
         width: 100%
         height: 100%
         object-fit: cover
+        border-radius: $radius-default
 </style>

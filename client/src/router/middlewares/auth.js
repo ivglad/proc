@@ -1,11 +1,14 @@
 export default function auth({ to, from, next, store }) {
   const user = store.user
-  console.log('auth', user)
+  // console.log('auth', user)
+  console.log(next)
   if (!user && to.path !== '/auth') {
     console.log('!auth', user)
     return next({
       path: '/auth',
     })
+    return next('/auth')
+    // return
   }
 
   if (user && to.path === '/auth') {
@@ -13,6 +16,5 @@ export default function auth({ to, from, next, store }) {
       path: '/',
     })
   }
-
   return next()
 }
