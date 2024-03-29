@@ -50,11 +50,7 @@ const errorMiddleware = (to, next, user) => {
     return false
   }
 
-  if (user.role === 'vip') {
-    next('/vip')
-  } else {
-    next('/')
-  }
+  next(roleDefaultPath(user))
   return false
 }
 
@@ -69,39 +65,25 @@ const authMiddleware = (to, next, user) => {
   return true
 }
 
+const roleMiddleware = (to, next, user) => {
+  if (!to.meta.roles) return true
+  if (to.meta.roles.includes(user.role)) return true
+
+  next(roleDefaultPath(user))
+  return false
+}
+
 const roleDefaultPath = (user) => {
   if (user.role === 'vip') return '/vip'
   if (user.role === 'admin') return '/vip'
   return '/'
 }
 
-const roleMiddleware = (to, from, next, user) => {
-  if (!to.meta.roles) return true
-  if (to.meta.roles.includes(user.role)) return true
-
-  if (from.path === to.path) {
-    next(roleDefaultPath(user))
-  } else {
-    next(from.path)
-  }
-  return false
-}
-
 const middlewarePipeline = (context) => {
   const { to, from, next, authStore } = context
-  const errorMiddlewareResult = errorMiddleware(to, next, authStore.user)
-  const authMiddlewareResult = authMiddleware(to, next, authStore.user)
-
-  if (!errorMiddlewareResult || !authMiddlewareResult) {
-    return false
-  }
-
-  const roleMiddlewareResult = roleMiddleware(to, from, next, authStore.user)
-
-  if (!roleMiddlewareResult) {
-    return false
-  }
-
+  if (!errorMiddleware(to, next, authStore.user)) return false
+  if (!authMiddleware(to, next, authStore.user)) return false
+  if (!roleMiddleware(to, next, authStore.user)) return true
   return true
 }
 
@@ -114,7 +96,6 @@ router.beforeEach(async (to, from, next) => {
   }
 
   const pipeline = middlewarePipeline(context)
-
   if (pipeline) next()
   else return false
 })

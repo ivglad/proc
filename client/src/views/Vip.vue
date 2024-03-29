@@ -37,13 +37,15 @@ import { ref } from 'vue'
 
 .tiles
   display: flex
-  justify-content: center
-  gap: $offset-l
+  justify-content: space-between
+  // gap: $offset-l
   .movie,
   .food
     @include background(default, 80)
     display: flex
     flex-direction: column
+    aspect-ratio: 0.76
+    height: calc(1vh * 50)
     padding: $offset-xs
     // flex: 1 1 40%
     // max-width: 40%
