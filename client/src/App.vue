@@ -1,21 +1,20 @@
 <script setup>
-import { useAuthStore } from '@/store/authStore'
-import ControlPanel from '@/components/ControlPanel.vue'
+import { useAuthStore } from "@/store/authStore";
+import ControlPanel from "@/components/ControlPanel.vue";
 
 components: {
-  ControlPanel
+  ControlPanel;
 }
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 </script>
 
 <template>
-  <header>
-    <ControlPanel v-if="authStore.user" />
-  </header>
+  <header></header>
   <main>
     <router-view />
   </main>
+  <ControlPanel v-if="authStore.user" />
   <footer></footer>
 </template>
 
@@ -53,13 +52,14 @@ body
 
 
     header
-      position: fixed
-      display: flex
-      align-content: center
-      justify-content: center
-      width: 100%
-      bottom: 0
-      z-index: 100
+      // position: sticky
+      // display: flex
+      // align-content: center
+      // justify-content: center
+      // width: 100%
+      // // bottom: 0
+      // top: 100%
+      // z-index: 100
 
     main
       display: flex
@@ -67,5 +67,6 @@ body
       height: 100%
       align-items: center
       justify-content: center
+      margin-bottom: 80px
       overflow: hidden
 </style>

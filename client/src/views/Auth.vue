@@ -137,11 +137,7 @@ const signin = async () => {
       onSuccess: (data) => {
         const userData = data.data
         authStore.user = userData
-
-        // if (userData.role === 'vip') {
-        //   router.push('/vip')
-        //   return
-        // }
+        
         router.push('/')
       },
     },

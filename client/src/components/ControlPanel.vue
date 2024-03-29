@@ -1,56 +1,57 @@
 <script setup>
-import { ref } from 'vue'
-import AppIcon from '@/components/AppIcon.vue'
-import Player from '@/components/Player.vue'
+import { ref } from "vue";
+import AppIcon from "@/components/AppIcon.vue";
+import Player from "@/components/Player.vue";
 
 components: {
-  AppIcon
+  AppIcon;
 }
 
-const mainPlayer = ref(false)
+const mainPlayer = ref(false);
 </script>
 
 <template>
-  <nav class="control-panel">
-    <section class="main-section">
-      <div class="first-block">
-        <AppIcon name="user" type="button" />
-        <AppIcon name="home" type="button" />
-        <AppIcon name="films" type="button" />
-        <AppIcon name="food" type="button" />
-      </div>
-      <!-- <Transition name="blur" mode="out-in"> -->
-      <div class="center-block" v-if="!mainPlayer">
-        <Player
-          v-if="!mainPlayer"
-          type="info"
-          v-model:mainPlayer="mainPlayer" />
-        <!-- <Player v-else class="main-player" v-model:mainPlayer="mainPlayer" /> -->
-      </div>
-      <!-- </Transition> -->
-      <div class="third-block">
-        <AppIcon name="cart" type="button" />
-      </div>
-    </section>
-    <section class="second-section">
-      <!-- <Transition name="blur" mode="out-in"> -->
-      <Player
-        v-if="mainPlayer"
-        class="main-player"
-        v-model:mainPlayer="mainPlayer" />
-      <!-- </Transition> -->
-    </section>
+  <nav class="control">
+    <div class="control-panel">
+      <section class="main-section">
+        <div class="first-block">
+          <AppIcon name="user" type="button" />
+          <AppIcon name="home" type="button" />
+          <AppIcon name="films" type="button" />
+          <AppIcon name="food" type="button" />
+        </div>
+        <!-- <Transition name="blur" mode="out-in"> -->
+        <div class="center-block" v-if="!mainPlayer">
+          <Player v-if="!mainPlayer" type="info" v-model:mainPlayer="mainPlayer" />
+          <!-- <Player v-else class="main-player" v-model:mainPlayer="mainPlayer" /> -->
+        </div>
+        <!-- </Transition> -->
+        <div class="third-block">
+          <AppIcon name="cart" type="button" />
+        </div>
+      </section>
+      <section class="second-section">
+        <!-- <Transition name="blur" mode="out-in"> -->
+        <Player v-if="mainPlayer" class="main-player" v-model:mainPlayer="mainPlayer" />
+        <!-- </Transition> -->
+      </section>
+    </div>
   </nav>
 </template>
 
 <style lang="sass" scoped>
-.control-panel
-  @include background(default, 80)
+.control
   position: fixed
-  bottom: $offset-2xs
+  bottom: $offset-3xs
+  display: flex
+  justify-content: center
+  width: 100%
+  // margin-bottom: $offset-3xs
+.control-panel
+  @include background(blur, 80)
   display: flex
   align-items: center
-  width: clamp(50vw, 92%, 1920px)
+  width: $container-width
   @include mq(xs)
     width: 100%
 

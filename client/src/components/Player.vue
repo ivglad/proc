@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import AppIcon from '@/components/AppIcon.vue'
+import { ref } from "vue";
+import AppIcon from "@/components/AppIcon.vue";
 
 const props = defineProps({
   mainPlayer: {
@@ -8,15 +8,15 @@ const props = defineProps({
   },
   type: {
     type: String,
-    default: 'player',
+    default: "player",
   },
-})
+});
 
-const emit = defineEmits(['update:mainPlayer'])
+const emit = defineEmits(["update:mainPlayer"]);
 
 const changePlayer = () => {
-  emit('update:mainPlayer', !props.mainPlayer)
-}
+  emit("update:mainPlayer", !props.mainPlayer);
+};
 </script>
 
 <template>
@@ -29,11 +29,7 @@ const changePlayer = () => {
       <div class="progress" @click="changePlayer">
         <div class="title">
           <span>Грань будущего</span>
-          <AppIcon
-            class="show-player-button"
-            name="back"
-            type="button"
-            :bg="false" />
+          <AppIcon class="show-player-button" name="back" type="button" :bg="false" />
         </div>
         <span class="line">
           <span class="line-progress"></span>
@@ -129,7 +125,7 @@ const changePlayer = () => {
           order: 2
 
   .main-player
-    @include background(default, 80)
+    @include background(blur, 80)
     padding: $offset-3xs $offset-xs
     cursor: default
     .show-player-button

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import { ref } from 'vue'
             <img src="../assets/img/vip/movies-logo.jpg" alt="Фильмы" />
           </picture>
         </div>
-        <div class="text">Может кино?</div>
+        <div class="text">Может<br />кино?</div>
       </div>
       <div class="food">
         <div class="title">Меню</div>
@@ -21,7 +21,7 @@ import { ref } from 'vue'
             <img src="../assets/img/vip/food-logo.jpg" alt="Еда" />
           </picture>
         </div>
-        <div class="text">Хочу есть!</div>
+        <div class="text">Хочу<br />есть!</div>
       </div>
     </div>
   </div>
@@ -37,30 +37,45 @@ import { ref } from 'vue'
 
 .tiles
   display: flex
-  justify-content: space-between
-  // gap: $offset-l
+  justify-content: center
+  width: $container-width
+  gap: calc(1vh * 2) calc(1vw * 3)
   .movie,
   .food
-    @include background(default, 80)
+    @include background-button(blur, 80)
+    @include transition
     display: flex
     flex-direction: column
+    gap: calc(1vh * 2) calc(1vw * 3)
     aspect-ratio: 0.76
-    height: calc(1vh * 50)
-    padding: $offset-xs
-    // flex: 1 1 40%
-    // max-width: 40%
-    // width: 100%
-
+    width: calc(1vh * 50)
+    padding: $offset-2xs
+    cursor: pointer
+    &:hover
+      @include transition-enter
+      .img img
+        @include transition-enter
+        opacity: 1
+    .title
+      @include font(calc($index * 3))
+      text-transform: uppercase
     .img
+      @include background
       width: 100%
       max-width: 450px
       height: 100%
       max-height: 580px
-      border: 1px solid transparent
-      border-radius: $radius-default
       img
+        @include transition
         width: 100%
         height: 100%
         object-fit: cover
         border-radius: $radius-default
+        opacity: 0.6
+        filter: grayscale(20%) contrast(90%)
+    .text
+      @include font(calc($index * 1.5))
+      align-self: end
+      text-align: end
+      text-transform: uppercase
 </style>

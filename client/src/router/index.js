@@ -33,7 +33,7 @@ const routes = [
     name: 'Vip',
     component: () => import('@/views/Vip.vue'),
     meta: {
-      roles: ['creator', 'admin', 'vip'],
+      roles: ['creator', 'admin', 'vip', 'spectator'],
     },
   },
 ]
@@ -58,14 +58,15 @@ const authMiddleware = (to, next, user) => {
   if (!user && to.path !== '/auth') {
     next('/auth')
     return false
-  } else if (user && to.path === '/auth') {
+  }
+  if (user && to.path === '/auth') {
     next('/')
     return false
   }
   return true
 }
 
-const roleMiddleware = (to, next, user) => {
+const roleMiddleware = (to, from, next, user) => {
   if (!to.meta.roles) return true
   if (to.meta.roles.includes(user.role)) return true
 
@@ -74,6 +75,7 @@ const roleMiddleware = (to, next, user) => {
 }
 
 const roleDefaultPath = (user) => {
+  if (user.role === 'spectator') return '/vip'
   if (user.role === 'vip') return '/vip'
   if (user.role === 'admin') return '/vip'
   return '/'
@@ -83,7 +85,7 @@ const middlewarePipeline = (context) => {
   const { to, from, next, authStore } = context
   if (!errorMiddleware(to, next, authStore.user)) return false
   if (!authMiddleware(to, next, authStore.user)) return false
-  if (!roleMiddleware(to, next, authStore.user)) return true
+  if (!roleMiddleware(to, from, next, authStore.user)) return false
   return true
 }
 
