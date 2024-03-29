@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/store/authStore'
-import middlewarePipeline from './middlewares/_middlewarePipeline'
-import auth from './middlewares/auth'
-import vipGuest from './middlewares/vipGuest'
 
 const routes = [
   {
@@ -15,7 +12,7 @@ const routes = [
     name: 'Главная',
     component: () => import('@/views/Home.vue'),
     meta: {
-      middleware: [vipGuest],
+      roles: ['creator'],
     },
   },
   {
@@ -28,7 +25,7 @@ const routes = [
     name: 'Ui',
     component: () => import('@/views/Ui.vue'),
     meta: {
-      middleware: [vipGuest],
+      roles: ['creator'],
     },
   },
   {
@@ -36,7 +33,7 @@ const routes = [
     name: 'Vip',
     component: () => import('@/views/Vip.vue'),
     meta: {
-      middleware: [vipGuest],
+      roles: ['creator', 'admin', 'vip'],
     },
   },
 ]
@@ -46,52 +43,84 @@ const router = createRouter({
   routes,
 })
 
-const errorGuard = (to, from) => {
-  if (to.name === '404') return from.path
-  else return null
+const errorMiddleware = (to, next, user) => {
+  if (to.name !== '404') return true
+  if (!user) {
+    next('/auth')
+    return false
+  }
+
+  if (user.role === 'vip') {
+    next('/vip')
+  } else {
+    next('/')
+  }
+  return false
 }
 
-const authGuard = (to, user) => {
-  if (!user && to.path !== '/auth') return '/auth'
-  else if (user && to.path === '/auth') return '/'
-  else return null
+const authMiddleware = (to, next, user) => {
+  if (!user && to.path !== '/auth') {
+    next('/auth')
+    return false
+  } else if (user && to.path === '/auth') {
+    next('/')
+    return false
+  }
+  return true
 }
 
-const vipGuestGuard = (to, user) => {
-  if (user.role === 'vip' && to.fullPath.indexOf('/vip') === -1) return '/vip'
-  else return null
+const roleDefaultPath = (user) => {
+  if (user.role === 'vip') return '/vip'
+  if (user.role === 'admin') return '/vip'
+  return '/'
+}
+
+const roleMiddleware = (to, from, next, user) => {
+  if (!to.meta.roles) return true
+  if (to.meta.roles.includes(user.role)) return true
+
+  if (from.path === to.path) {
+    next(roleDefaultPath(user))
+  } else {
+    next(from.path)
+  }
+  return false
+}
+
+const middlewarePipeline = (context) => {
+  const { to, from, next, authStore } = context
+  const errorMiddlewareResult = errorMiddleware(to, next, authStore.user)
+  const authMiddlewareResult = authMiddleware(to, next, authStore.user)
+
+  if (!errorMiddlewareResult || !authMiddlewareResult) {
+    return false
+  }
+
+  const roleMiddlewareResult = roleMiddleware(to, from, next, authStore.user)
+
+  if (!roleMiddlewareResult) {
+    return false
+  }
+
+  return true
 }
 
 router.beforeEach(async (to, from, next) => {
-  const authStore = useAuthStore()
-  const user = authStore.user
+  const context = {
+    to,
+    from,
+    next,
+    authStore: useAuthStore(),
+  }
 
-  const errorGuardResult = errorGuard(to, from)
-  const authGuardResult = authGuard(to, user)
-  const vipGuestGuardResult = vipGuestGuard(to, user)
+  const pipeline = middlewarePipeline(context)
 
-  console.log(user)
+  if (pipeline) next()
+  else return false
+})
 
-  if (errorGuardResult) next(errorGuardResult)
-  else if (authGuardResult) next(authGuardResult)
-  else if (vipGuestGuardResult) next(vipGuestGuardResult)
-  else next()
-
-  // if (!to.meta.middleware) {
-  //   return next()
-  // }
-  // const middleware = to.meta.middleware
-  // const firstMiddleware = middleware[0]
-  // const context = {
-  //   to,
-  //   from,
-  //   next,
-  //   store: useAuthStore(),
-  // }
-  // return firstMiddleware({
-  //   ...context,
-  //   next: middlewarePipeline(context, middleware, 1),
-  // })
+router.onError((error) => {
+  console.log('router.onError', error)
 })
 
 export default router
