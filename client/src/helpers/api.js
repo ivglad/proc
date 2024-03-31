@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useAuthStore } from '@/store/authStore'
+import { useUserStore } from '@/store/userStore'
 
 const api = axios.create({
   withCredentials: true,
@@ -7,8 +7,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const authStore = useAuthStore()
-    const user = authStore.user
+    const userStore = useUserStore()
+    const user = userStore.user
 
     if (user && user.accessToken) {
       config.headers.Authorization = `Bearer ${user.accessToken}`
@@ -26,8 +26,8 @@ api.interceptors.response.use(
     return response
   },
   async (error) => {
-    const authStore = useAuthStore()
-    const user = authStore.user
+    const userStore = useUserStore()
+    const user = userStore.user
     const originalConfig = error.config
 
     if (
@@ -50,7 +50,7 @@ api.interceptors.response.use(
 
         return api.request(originalConfig)
       } catch (e) {
-        authStore.$patch({ user: null })
+        userStore.$patch({ user: null })
         return Promise.reject(error)
       }
     }

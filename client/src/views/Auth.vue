@@ -1,7 +1,7 @@
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/store/authStore'
+import { useUserStore } from '@/store/userStore'
 import { useSignupUser, useSigninUser } from '@/helpers/queries'
 import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
@@ -11,7 +11,7 @@ components: {
   AppInput
 }
 
-const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const router = useRouter()
 
@@ -136,9 +136,8 @@ const signin = async () => {
       },
       onSuccess: (data) => {
         const userData = data.data
-        authStore.user = userData
-        
-        router.push('/')
+        userStore.initUser(userData)
+        router.push(userStore.user.homePage)
       },
     },
   )

@@ -1,17 +1,19 @@
 <script setup>
-import { ref } from "vue";
-import AppIcon from "@/components/AppIcon.vue";
-import Player from "@/components/Player.vue";
+import { ref, onMounted } from 'vue'
+import AppIcon from '@/components/AppIcon.vue'
+import VipPlayer from '@/components/VipPlayer.vue'
 
 components: {
-  AppIcon;
+  AppIcon
 }
 
-const mainPlayer = ref(false);
+const props = defineProps({})
+
+const mainPlayer = ref(false)
 </script>
 
 <template>
-  <nav class="control">
+  <nav class="control" ref="control">
     <div class="control-panel">
       <section class="main-section">
         <div class="first-block">
@@ -20,20 +22,21 @@ const mainPlayer = ref(false);
           <AppIcon name="films" type="button" />
           <AppIcon name="food" type="button" />
         </div>
-        <!-- <Transition name="blur" mode="out-in"> -->
         <div class="center-block" v-if="!mainPlayer">
-          <Player v-if="!mainPlayer" type="info" v-model:mainPlayer="mainPlayer" />
-          <!-- <Player v-else class="main-player" v-model:mainPlayer="mainPlayer" /> -->
+          <VipPlayer
+            v-if="!mainPlayer"
+            type="info"
+            v-model:mainPlayer="mainPlayer" />
         </div>
-        <!-- </Transition> -->
         <div class="third-block">
           <AppIcon name="cart" type="button" />
         </div>
       </section>
       <section class="second-section">
-        <!-- <Transition name="blur" mode="out-in"> -->
-        <Player v-if="mainPlayer" class="main-player" v-model:mainPlayer="mainPlayer" />
-        <!-- </Transition> -->
+        <VipPlayer
+          v-if="mainPlayer"
+          class="main-player"
+          v-model:mainPlayer="mainPlayer" />
       </section>
     </div>
   </nav>
@@ -46,7 +49,8 @@ const mainPlayer = ref(false);
   display: flex
   justify-content: center
   width: 100%
-  // margin-bottom: $offset-3xs
+  max-width: 800px
+
 .control-panel
   @include background(blur, 80)
   display: flex

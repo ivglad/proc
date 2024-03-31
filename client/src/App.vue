@@ -1,34 +1,31 @@
 <script setup>
-import { useAuthStore } from "@/store/authStore";
-import ControlPanel from "@/components/ControlPanel.vue";
+import { onMounted, ref, watchEffect } from 'vue'
+import { useUserStore } from '@/store/userStore'
+import VipControlPanel from '@/components/VipControlPanel.vue'
 
 components: {
-  ControlPanel;
+  VipControlPanel
 }
 
-const authStore = useAuthStore();
+const userStore = useUserStore()
 </script>
 
 <template>
   <header></header>
-  <main>
+  <main :class="{ 'main-padding': userStore.user }">
     <router-view />
   </main>
-  <ControlPanel v-if="authStore.user" />
+  <VipControlPanel v-if="userStore.user" />
   <footer></footer>
 </template>
 
 <style lang="sass">
-
-html
-  width: 100vw
-  height: 100vh
-
 body
   @include font
-  width: 100%
+  width: 100vw
   min-width: 320px
-  height: 100%
+  height: 100vh
+  min-height: 320px
   margin: 0
   padding: 0
   color: $text-color-default
@@ -36,8 +33,8 @@ body
   -moz-osx-font-smoothing: grayscale
   text-rendering: optimizeLegibility
   background: $background-main
+  background-repeat: no-repeat
   overflow-x: hidden
-
 
   #app
     display: flex
@@ -46,27 +43,19 @@ body
     justify-content: center
     position: relative
     width: 100%
-    min-width: 320px
     height: 100%
-    overflow-x: hidden
-
-
-    header
-      // position: sticky
-      // display: flex
-      // align-content: center
-      // justify-content: center
-      // width: 100%
-      // // bottom: 0
-      // top: 100%
-      // z-index: 100
 
     main
       display: flex
+      flex-direction: column
       width: 100%
       height: 100%
       align-items: center
       justify-content: center
-      margin-bottom: 80px
       overflow: hidden
+
+    .main-padding
+      padding-bottom: calc(68px + $offset-3xs)
+      @include mq(s)
+        padding-bottom: calc(130px + $offset-3xs)
 </style>
