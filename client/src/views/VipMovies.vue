@@ -16,7 +16,7 @@ const movies = ref([
     production: 'США, Канада',
     year: '2014',
     duration: '113',
-    image: '',
+    image: '../assets/img/vip/movies-logo',
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ const movies = ref([
     production: 'США, Канада',
     year: '2014',
     duration: '113',
-    image: '',
+    image: '../assets/img/vip/movies-logo',
   },
 ])
 </script>
