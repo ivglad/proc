@@ -56,6 +56,7 @@ const mainPlayer = ref(false)
   display: flex
   align-items: center
   width: $container-width
+  background: rgba(36, 36, 36, 0.7)
   @include mq(xs)
     width: 100%
 

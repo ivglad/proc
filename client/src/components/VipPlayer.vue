@@ -134,6 +134,7 @@ const changePlayer = () => {
     @include background(blur, 80)
     padding: $offset-3xs $offset-xs
     cursor: default
+    background: rgba(36, 36, 36, 0.7)
     .show-player-button
       transform: rotate(-90deg) translate(18%, 34%) !important
     .title
