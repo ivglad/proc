@@ -49,7 +49,7 @@ const mainPlayer = ref(false)
   display: flex
   justify-content: center
   width: 100%
-  max-width: 800px
+  max-width: 1200px
 
 .control-panel
   @include background(blur, 80)

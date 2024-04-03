@@ -21,7 +21,7 @@ const userStore = useUserStore()
 
 <style lang="sass">
 body
-  @include font
+  @include font-base
   width: 100vw
   min-width: 320px
   height: 100vh
@@ -29,6 +29,7 @@ body
   margin: 0
   padding: 0
   color: $text-color-default
+  word-break: normal
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-rendering: optimizeLegibility
@@ -43,20 +44,16 @@ body
     justify-content: center
     position: relative
     width: 100%
-    height: 100%
 
     main
       display: flex
       flex-direction: column
       width: 100%
-      height: 100%
       align-items: center
       padding: calc($index * 0.8)
-      // justify-content: center
-      // overflow: hidden
 
     .main-padding
-      padding-bottom: calc(68px + $offset-3xs)
+      padding-bottom: calc(78px + $offset-3xs)
       @include mq(s)
-        padding-bottom: calc(130px + $offset-3xs)
+        padding-bottom: calc(140px + $offset-3xs)
 </style>
