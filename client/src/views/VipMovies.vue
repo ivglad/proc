@@ -60,9 +60,10 @@ const movies = ref([
 .movies
   display: grid
   grid-template-columns: repeat(auto-fit, minmax(min(530px, 100%), 1fr))
-  flex-direction: column
-  align-items: center
-  justify-content: center
+  grid-auto-rows: 1fr
+  // flex-direction: column
+  // align-items: center
+  // justify-content: center
   gap: $offset-2xs
   width: $container-width
   max-width: 1200px
