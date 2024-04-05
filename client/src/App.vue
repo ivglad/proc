@@ -50,10 +50,10 @@ body
       flex-direction: column
       width: 100%
       align-items: center
-      padding: calc($index * 0.8)
+      padding: $offset-xs
 
     .main-padding
-      padding-bottom: calc(78px + $offset-3xs)
+      padding-bottom: calc(78px + $offset-3xs + $offset-xs)
       @include mq(s)
-        padding-bottom: calc(140px + $offset-3xs)
+        padding-bottom: calc(140px + $offset-3xs + $offset-xs)
 </style>

@@ -97,4 +97,6 @@ const mainPlayer = ref(false)
     bottom: calc(100% + $offset-3xs)
     display: flex
     width: 100%
+    @include mq(m)
+      bottom: calc(100% + $offset-4xs)
 </style>

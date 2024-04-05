@@ -12,7 +12,8 @@ $offset-s: 2rem
 $offset-xs: 1.25rem
 $offset-2xs: 1rem
 $offset-3xs: 0.75rem
-$offset-4xs: 0.25rem
+$offset-4xs: 0.5rem
+$offset-5xs: 0.25rem
 
 // Radius
 $radius-default: 14px
@@ -81,8 +82,17 @@ $control-min-height: 68px
       border-radius: $radius-default
       z-index: -1
 
+@mixin background-active($type: default, $blur: 0)
+  @include background($type, $blur)
+  cursor: pointer
+  &:hover,
+  &:focus
+    box-shadow: 0px 0px 0.4px 1px $border-color-active
+    background: $background-active
+
 @mixin background-button($type: default, $blur: 0)
   @include background($type, $blur)
+  cursor: pointer
   &:hover,
   &:focus
     color: $text-color-active
@@ -92,6 +102,7 @@ $control-min-height: 68px
 @mixin background-button-inline($type: default, $blur: 0)
   @include background($type, $blur)
   background: transparent
+  cursor: pointer
   &:hover,
   &:focus
     background: transparent
@@ -100,6 +111,7 @@ $control-min-height: 68px
   @include background($type, $blur)
   box-shadow: 0px 0px 0.4px 1px $border-color-input
   background: $background-input
+  cursor: pointer
   // background: rgba(58, 58, 58, 1)
   &:hover,
   &:focus
@@ -109,6 +121,7 @@ $control-min-height: 68px
   @include background($type, $blur)
   box-shadow: 0px 0px 0.4px 1px $border-color-error
   background: $background-input
+  cursor: pointer
   // background: rgb(59, 59, 59)
   &:hover,
   &:focus
@@ -149,7 +162,3 @@ img
   width: 100%
   height: 100%
   object-fit: cover
-
-// .title
-//   line-height: 80% !important
-//   padding-bottom: $offset-4xs
