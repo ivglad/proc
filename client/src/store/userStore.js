@@ -1,6 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { ref, watch } from 'vue'
-import router from '@/router/index'
 
 export const useUserStore = defineStore('userStore', () => {
   const getUserFromLocalStorage = () => {

@@ -1,28 +1,24 @@
 <script setup>
 import { ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
+import { useVipPlayerStore } from '@/store/vipPlayerStore'
 
-const props = defineProps({
-  mainPlayer: {
-    type: Boolean,
-  },
-  type: {
-    type: String,
-    default: 'player',
-  },
-})
-
-const emit = defineEmits(['update:mainPlayer'])
+const vipPlayerStore = useVipPlayerStore()
+const player = vipPlayerStore.player
 
 const changePlayer = () => {
-  emit('update:mainPlayer', !props.mainPlayer)
+  if (player.mode === 'show') {
+    player.mode = 'hide'
+  } else {
+    player.mode = 'show'
+  }
 }
 </script>
 
 <template>
   <div class="player">
-    <section class="main" :class="{ 'main-player': props.type === 'player' }">
-      <div class="first-controls" v-if="props.type === 'player'">
+    <section class="main" :class="{ show: player.mode === 'show' }">
+      <div class="first-controls" v-if="player.mode === 'show'">
         <AppIcon name="play" type="button" />
         <AppIcon name="stop" type="button" />
       </div>
@@ -45,12 +41,12 @@ const changePlayer = () => {
           <span class="total">01:53:00</span>
         </div>
       </div>
-      <div class="second-controls" v-if="props.type === 'player'">
+      <div class="second-controls" v-if="player.mode === 'show'">
         <AppIcon name="volume" type="button" />
         <AppIcon name="light" type="button" />
       </div>
     </section>
-    <section class="info" v-if="props.type === 'player'"></section>
+    <section class="info" v-if="player.mode === 'show'"></section>
   </div>
 </template>
 
@@ -58,32 +54,32 @@ const changePlayer = () => {
 .player
   display: flex
   flex-direction: column
-  justify-content: center
   align-items: center
   width: 100%
-
+  height: 100%
   .main
     display: flex
     align-items: center
     flex-wrap: wrap
     gap: $offset-xs $offset-xs
     width: 100%
+    height: 100%
     padding: 0
-
     div
       display: flex
       flex: 0 1 auto
       gap: $offset-3xs
-
     .first-controls
       @include mq(s)
           order: 2
-
     .progress
       display: flex
       flex-direction: column
       flex: 1 0 max-content
-      gap: $offset-4xs
+      justify-content: space-between
+      height: 100%
+      min-height: 48px
+      gap: 0
       user-select: none
       cursor: pointer
       @include mq(s)
@@ -110,7 +106,6 @@ const changePlayer = () => {
           height: 100%
           border-radius: 2px
           background: $element-color-default
-
       .time
         @include font(0.8125rem)
         display: flex
@@ -124,13 +119,11 @@ const changePlayer = () => {
         .total
           color: $text-color-inactive
           margin-left: auto
-
     .second-controls
       margin-left: auto
       @include mq(s)
           order: 2
-
-  .main-player
+  .show
     @include background(blur, 80)
     padding: $offset-3xs $offset-xs
     cursor: default
@@ -141,6 +134,4 @@ const changePlayer = () => {
     .time
       span
         color: $text-color-default !important
-
-.play-info
 </style>

@@ -12,7 +12,7 @@ const userStore = useUserStore()
 
 <template>
   <header></header>
-  <main :class="{ 'main-padding': userStore.user }">
+  <main>
     <router-view />
   </main>
   <VipControlPanel v-if="userStore.user" />
@@ -21,11 +21,12 @@ const userStore = useUserStore()
 
 <style lang="sass">
 body
-  @include font-base
-  width: 100vw
-  min-width: 320px
-  height: 100vh
-  min-height: 320px
+  @include font-base(1rem)
+  display: flex
+  align-items: center
+  justify-content: center
+  min-width: 100vw
+  min-height: 100vh
   margin: 0
   padding: 0
   color: $text-color-default
@@ -41,19 +42,15 @@ body
     display: flex
     flex-direction: column
     align-items: center
-    justify-content: center
     position: relative
-    width: 100%
+    min-width: 100vw
+    min-height: 100vh
 
     main
       display: flex
       flex-direction: column
-      width: 100%
+      flex: 1 1 100%
       align-items: center
-      padding: $offset-xs
-
-    .main-padding
-      padding-bottom: calc(78px + $offset-3xs + $offset-xs)
-      @include mq(s)
-        padding-bottom: calc(140px + $offset-3xs + $offset-xs)
+      justify-content: center
+      margin: $offset-xs
 </style>

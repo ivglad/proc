@@ -1,15 +1,16 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   movie: Object,
 })
 
-const openMovie = () => {}
+const router = useRouter()
 </script>
 
 <template>
-  <div class="movie" @click="openMovie">
+  <div class="movie" @click="router.push(`/vip/movies/${movie.id}/play`)">
     <div class="img">
       <picture>
         <source srcset="../assets/img/vip/movies-logo.webp" type="image/webp" />
@@ -50,8 +51,8 @@ const openMovie = () => {}
 
 <style lang="sass" scoped>
 .movie
-  @include background-active
-  @include transition
+  @include background
+  @include active
   display: flex
   gap: $offset-2xs
   width: 100%
@@ -61,11 +62,13 @@ const openMovie = () => {}
   overflow: hidden
   @include mq(s)
     flex-direction: column
-    gap: $offset-4xs
+    gap: $offset-3xs
     max-height: 35rem
   .img
+    flex: 1 1 25%
     min-width: 200px
     aspect-ratio: 0.8
+    mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.2))
     @include mq(s)
       max-width: 100%
       aspect-ratio: 1.8
@@ -76,14 +79,16 @@ const openMovie = () => {}
   .info
     display: flex
     flex-direction: column
+    flex: 1 1 75%
     gap: $offset-5xs
-    width: 100%
-    height: 100%
+    // width: 100%
+    // height: 100%
     overflow: hidden
     .title
-      @include font(2rem, 400, 100%)
-      padding-bottom: $offset-3xs
+      @include font(2rem, 300, 100%)
+      @include transition
       padding-right: clamp($offset-4xs, $index, $offset-xs)
+      padding-bottom: $offset-3xs
     &__top
       display: flex
       flex-wrap: wrap

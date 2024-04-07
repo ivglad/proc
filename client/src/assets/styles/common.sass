@@ -26,16 +26,23 @@ $container-height: calc(100vh - 80px)
 
 $index: calc(1vw + 1vh)
 
-$control-min-height: 68px
+$controlPanelHeight: 72px
 
 // Hover
-@mixin hover()
+@mixin active()
   @media (hover: none)
+    @include transition
     -webkit-tap-highlight-color: transparent
-    &:active
+    cursor: pointer
+    &:active,
+    &:focus
+      @include transition-enter
       @content
   @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+    @include transition
+    cursor: pointer
     &:hover
+      @include transition-enter
       @content
 
 // Media query
@@ -84,11 +91,9 @@ $control-min-height: 68px
 
 @mixin background-active($type: default, $blur: 0)
   @include background($type, $blur)
-  cursor: pointer
-  &:hover,
-  &:focus
-    box-shadow: 0px 0px 0.4px 1px $border-color-active
-    background: $background-active
+  // @include active
+  box-shadow: 0px 0px 0.4px 1px $border-color-active
+  background: $background-active
 
 @mixin background-button($type: default, $blur: 0)
   @include background($type, $blur)

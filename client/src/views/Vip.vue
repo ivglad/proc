@@ -40,25 +40,25 @@ const router = useRouter()
   display: flex
   align-items: center
   justify-content: center
-  width: 100%
-  height: 100%
+  width: $container-width
+  max-width: 1200px
+  max-height: calc(100vh - $controlPanelHeight - $offset-3xs - $offset-xs * 2)
 
 .tiles
   display: flex
   justify-content: center
-  width: $container-width
-  max-height: calc(100% - $index * 2)
-  gap: calc(1vh * 2) calc(1vw * 3)
+  max-height: inherit
+  gap: $offset-2xs
   .movie,
   .food
-    @include background(blur, 80)
+    @include background
     @include transition
     display: flex
     flex-direction: column
     flex: 1 1 100%
-    gap: calc($index * 0.8)
+    gap: $offset-2xs
     aspect-ratio: 0.6
-    padding: calc($index * 0.8)
+    padding: $offset-3xs
     cursor: pointer
     user-select: none
     overflow: hidden
@@ -68,14 +68,19 @@ const router = useRouter()
         @include transition-enter
         opacity: 1
     .title
-      @include font(calc($index * 2), 200)
+      @include font(3rem, 200)
+      @include transition
+      display: flex
+      width: fit-content
       text-transform: uppercase
       text-wrap: nowrap
+      mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
     .img
       @include background
       width: 100%
       height: 100%
       overflow: hidden
+      mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.2))
       img
         @include transition
         width: 100%
@@ -86,24 +91,26 @@ const router = useRouter()
         opacity: 0.6
         filter: grayscale(20%) contrast(90%)
     .text
-      @include font(calc($index), 200)
+      @include font(1.5rem, 200)
       color: $text-color-inactive
       align-self: end
       text-align: end
       text-transform: uppercase
-      -webkit-background-clip: text
-      -webkit-text-fill-color: transparent
-      background-clip: text
+      // -webkit-background-clip: text
+      // -webkit-text-fill-color: transparent
+      // background-clip: text
   .movie
     .title
       color: $text-color-active
     .text
       color: $text-color-active
-      background-image: linear-gradient(135deg, $text-color-active, transparent)
+      mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
+      // background-image: linear-gradient(135deg, $text-color-active, transparent)
   .food
     .title
       color: $text-color-error
     .text
       color: $text-color-error
-      background-image: linear-gradient(135deg, $text-color-error, transparent)
+      mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
+      // background-image: linear-gradient(135deg, $text-color-error, transparent)
 </style>

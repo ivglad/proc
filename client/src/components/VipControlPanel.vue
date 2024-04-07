@@ -2,14 +2,19 @@
 import { ref, onMounted } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
 import VipPlayer from '@/components/VipPlayer.vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/store/userStore'
+import { useVipPlayerStore } from '@/store/vipPlayerStore'
 
 components: {
   AppIcon
 }
 
-const props = defineProps({})
+const router = useRouter()
+const userStore = useUserStore()
+const vipPlayerStore = useVipPlayerStore()
 
-const mainPlayer = ref(false)
+const player = vipPlayerStore.player
 </script>
 
 <template>
@@ -18,25 +23,28 @@ const mainPlayer = ref(false)
       <section class="main-section">
         <div class="first-block">
           <AppIcon name="user" type="button" />
-          <AppIcon name="home" type="button" />
-          <AppIcon name="films" type="button" />
-          <AppIcon name="food" type="button" />
+          <AppIcon
+            name="home"
+            type="button"
+            @click="router.push(`${userStore.user.homePage}`)" />
+          <AppIcon
+            name="movies"
+            type="button"
+            @click="router.push('/vip/movies')" />
+          <AppIcon
+            name="food"
+            type="button"
+            @click="router.push('/vip/food')" />
         </div>
-        <div class="center-block" v-if="!mainPlayer">
-          <VipPlayer
-            v-if="!mainPlayer"
-            type="info"
-            v-model:mainPlayer="mainPlayer" />
+        <div class="center-block">
+          <VipPlayer v-if="player.mode === 'hide'" />
         </div>
         <div class="third-block">
           <AppIcon name="cart" type="button" />
         </div>
       </section>
       <section class="second-section">
-        <VipPlayer
-          v-if="mainPlayer"
-          class="main-player"
-          v-model:mainPlayer="mainPlayer" />
+        <VipPlayer v-if="player.mode === 'show'" class="show" />
       </section>
     </div>
   </nav>
@@ -44,15 +52,19 @@ const mainPlayer = ref(false)
 
 <style lang="sass" scoped>
 .control
-  position: fixed
-  bottom: $offset-3xs
   display: flex
   justify-content: center
   width: 100%
   max-width: 1200px
+  height: 72px
+  margin-bottom: $offset-3xs
+  @include mq(s)
+    height: 134px
 
 .control-panel
   @include background(blur, 80)
+  position: fixed
+  bottom: $offset-3xs
   display: flex
   align-items: center
   width: $container-width
@@ -62,7 +74,6 @@ const mainPlayer = ref(false)
 
   .main-section
     display: flex
-    align-items: center
     justify-content: space-between
     flex-wrap: wrap
     gap: $offset-2xs $offset-xs
@@ -84,7 +95,7 @@ const mainPlayer = ref(false)
         flex: 1 1 100%
       .main-player
         position: absolute
-        left: 0px
+        left: 0
         bottom: calc(100% + $offset-3xs)
         display: flex
         width: 100%
