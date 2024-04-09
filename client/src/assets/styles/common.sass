@@ -75,7 +75,7 @@ $controlPanelHeight: 72px
   // transform-origin: 50% 50%
   // transform: perspective(1px) translate3d(0, 0, 0)
   border-radius: $radius-default
-  box-shadow: 0px 0px 0.4px 1px $border-color
+  box-shadow: 0px 0px 0.4px 1px $border-color-default
   background: $background-default
   @if $type == default
     @if $blur != 0
@@ -91,9 +91,13 @@ $controlPanelHeight: 72px
 
 @mixin background-active($type: default, $blur: 0)
   @include background($type, $blur)
-  // @include active
   box-shadow: 0px 0px 0.4px 1px $border-color-active
   background: $background-active
+
+@mixin background-active-error($type: default, $blur: 0)
+  @include background($type, $blur)
+  box-shadow: 0px 0px 0.4px 1px $border-color-error
+  background: $background-error
 
 @mixin background-button($type: default, $blur: 0)
   @include background($type, $blur)
@@ -112,12 +116,21 @@ $controlPanelHeight: 72px
   &:focus
     background: transparent
 
+@mixin background-button-disabled($type: default, $blur: 0)
+  @include background($type, $blur)
+  background: transparent
+  cursor: default
+  &:hover,
+  &:focus
+    cursor: default
+    box-shadow: 0px 0px 0.4px 1px $border-color-default
+    background: transparent
+
 @mixin background-input($type: default, $blur: 0)
   @include background($type, $blur)
-  box-shadow: 0px 0px 0.4px 1px $border-color-input
+  box-shadow: 0px 0px 0.4px 1px $border-color-default-input
   background: $background-input
   cursor: pointer
-  // background: rgba(58, 58, 58, 1)
   &:hover,
   &:focus
     box-shadow: 0px 0px 0.4px 1px $border-color-active
@@ -127,7 +140,6 @@ $controlPanelHeight: 72px
   box-shadow: 0px 0px 0.4px 1px $border-color-error
   background: $background-input
   cursor: pointer
-  // background: rgb(59, 59, 59)
   &:hover,
   &:focus
     box-shadow: 0px 0px 0.4px 1px $border-color-error
@@ -140,11 +152,11 @@ $controlPanelHeight: 72px
 *::-webkit-scrollbar-track
   background: transparent
 *::-webkit-scrollbar-thumb
-  background: $border-color
+  background: $border-color-default
   border-radius: $radius-default
 html *
   // scrollbar-width: thin
-  scrollbar-color: $border-color
+  scrollbar-color: $border-color-default
 
 button,
 input,

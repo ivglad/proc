@@ -34,7 +34,7 @@ const player = vipPlayerStore.player
           <AppIcon
             name="food"
             type="button"
-            @click="router.push('/vip/food')" />
+            @click="router.push('/vip/products')" />
         </div>
         <div class="center-block">
           <VipPlayer v-if="player.mode === 'hide'" />
@@ -54,8 +54,7 @@ const player = vipPlayerStore.player
 .control
   display: flex
   justify-content: center
-  width: 100%
-  max-width: 1200px
+  width: $container-width
   height: 72px
   margin-bottom: $offset-3xs
   @include mq(s)
@@ -68,6 +67,7 @@ const player = vipPlayerStore.player
   display: flex
   align-items: center
   width: $container-width
+  max-width: 1000px
   background: rgba(36, 36, 36, 0.7)
   @include mq(xs)
     width: 100%

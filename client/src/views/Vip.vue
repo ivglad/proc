@@ -7,7 +7,7 @@ const router = useRouter()
 <template>
   <div class="vip">
     <div class="tiles">
-      <div class="movie" @click="router.push('/vip/movies')">
+      <div class="movies" @click="router.push('/vip/movies')">
         <div class="title">Фильмы</div>
         <div class="img">
           <picture>
@@ -19,14 +19,14 @@ const router = useRouter()
         </div>
         <div class="text">Может<br />кино?</div>
       </div>
-      <div class="food" @click="router.push('/vip/food')">
+      <div class="products" @click="router.push('/vip/products')">
         <div class="title">Меню</div>
         <div class="img">
           <picture>
             <source
-              srcset="../assets/img/vip/food-logo.webp"
+              srcset="../assets/img/vip/products-logo.webp"
               type="image/webp" />
-            <img src="../assets/img/vip/food-logo.jpg" alt="Еда" />
+            <img src="../assets/img/vip/products-logo.jpg" alt="Еда" />
           </picture>
         </div>
         <div class="text">Хочу<br />есть!</div>
@@ -49,8 +49,8 @@ const router = useRouter()
   justify-content: center
   max-height: inherit
   gap: $offset-2xs
-  .movie,
-  .food
+  .movies,
+  .products
     @include background
     @include transition
     display: flex
@@ -99,14 +99,14 @@ const router = useRouter()
       // -webkit-background-clip: text
       // -webkit-text-fill-color: transparent
       // background-clip: text
-  .movie
+  .movies
     .title
       color: $text-color-active
     .text
       color: $text-color-active
       mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
       // background-image: linear-gradient(135deg, $text-color-active, transparent)
-  .food
+  .products
     .title
       color: $text-color-error
     .text

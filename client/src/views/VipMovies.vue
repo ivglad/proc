@@ -12,7 +12,6 @@ const movies = vipMoviesStore.movies
 </script>
 
 <template>
-  <router-view />
   <div class="movies">
     <VipMovie v-for="movie in movies" :key="movie.id" :movie="movie" />
   </div>
@@ -28,11 +27,4 @@ const movies = vipMoviesStore.movies
   max-width: 1200px
   margin-top: auto
   margin-bottom: auto
-
-:deep(.movie)
-  @include active
-    @include background-active
-    .title
-      @include transition-enter
-      color: $text-color-active
 </style>

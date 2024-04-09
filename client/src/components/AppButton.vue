@@ -17,11 +17,16 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const classes = computed(() => {
   return {
-    'button--inline': props.styleType === 'inline',
+    'button-inline': props.styleType === 'inline',
+    'button-disabled': props.disabled,
   }
 })
 </script>
@@ -36,7 +41,7 @@ const classes = computed(() => {
 
 <style lang="sass" scoped>
 .button
-  @include background-button()
+  @include background-button
   @include transition
   display: flex
   align-items: center
@@ -53,6 +58,8 @@ const classes = computed(() => {
   text-wrap: nowrap
   &:hover
     @include transition-enter
-  &--inline
+  &-inline
     @include background-button-inline
+  &-disabled
+    @include background-button-disabled
 </style>

@@ -60,6 +60,11 @@ const router = useRouter()
   max-height: 18rem
   padding: $offset-3xs
   overflow: hidden
+  @include active
+    @include background-active
+    .title
+      @include transition-enter
+      color: $text-color-active
   @include mq(s)
     flex-direction: column
     gap: $offset-3xs
@@ -81,8 +86,6 @@ const router = useRouter()
     flex-direction: column
     flex: 1 1 75%
     gap: $offset-5xs
-    // width: 100%
-    // height: 100%
     overflow: hidden
     .title
       @include font(2rem, 300, 100%)

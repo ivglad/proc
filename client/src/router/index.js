@@ -43,16 +43,6 @@ const routes = [
     meta: {
       roles: ['admin', 'vip', 'spectator'],
     },
-    // children: [
-    //   {
-    //     path: ':id/play',
-    //     component: () => import('@/components/VipMoviePlay.vue'),
-    //     props: true,
-    //     meta: {
-    //       roles: ['admin', 'vip'],
-    //     },
-    //   },
-    // ],
   },
   {
     path: '/vip/movies/:id/play',
@@ -63,9 +53,9 @@ const routes = [
     },
   },
   {
-    path: '/vip/food',
-    name: 'VipFood',
-    component: () => import('@/views/VipFood.vue'),
+    path: '/vip/products',
+    name: 'VipProducts',
+    component: () => import('@/views/VipProducts.vue'),
     meta: {
       roles: ['admin', 'vip', 'spectator'],
     },
