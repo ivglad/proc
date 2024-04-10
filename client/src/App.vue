@@ -53,4 +53,8 @@ body
       align-items: center
       justify-content: center
       margin: $offset-xs
+      // margin: $offset-xs 0
+      // width: 100%
+      // max-height: calc(100vh - $controlPanelHeight - $offset-3xs - $offset-xs)
+      // overflow: auto
 </style>

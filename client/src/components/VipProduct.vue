@@ -36,26 +36,27 @@ const isSelected = ref(false)
 const showCalculations = ref(false)
 
 const selectProduct = () => {
+  if (isSelected.value && props.product.quantity < 1) {
+    isSelected.value = false
+    showCalculations.value = false
+    return
+  }
   if (props.product.quantity == 0) {
     addQuantity()
   }
-  isSelected.value = !isSelected.value
+  isSelected.value = true
+  showCalculations.value = true
 }
 
 const classes = computed(() => {
   return {
-    'product-select': isSelected.value || props.product.quantity > 0,
+    'product-select': isSelected.value,
   }
 })
 </script>
 
 <template>
-  <div
-    class="product"
-    :class="classes"
-    @click="selectProduct"
-    @mouseenter="showCalculations = true"
-    @mouseleave="showCalculations = false">
+  <div class="product" :class="classes" @click="selectProduct">
     <div class="img">
       <picture>
         <source
@@ -72,7 +73,10 @@ const classes = computed(() => {
         <div class="description">
           {{ product.description }}
         </div>
-        <div class="portion">{{ product.portion }}</div>
+        <div class="portion">
+          <span>Порция:</span>
+          {{ product.portion }}
+        </div>
       </div>
       <div
         class="info__bottom"
@@ -80,14 +84,13 @@ const classes = computed(() => {
         <AppButton
           class="button-reduce"
           :disabled="product.quantity < 1"
+          title="-"
           @click="reduceQuantity" />
         <div class="quantity">
           {{ product.quantity }}
         </div>
-        <AppButton class="button-add" @click="addQuantity" />
-        <div class="price">
-          {{ finalPrice }}
-        </div>
+        <AppButton class="button-add" title="+" @click="addQuantity" />
+        <div class="price">{{ finalPrice }} ₽</div>
       </div>
     </div>
   </div>
@@ -113,7 +116,8 @@ const classes = computed(() => {
       @include transition-enter
       color: $text-color-error
   .img
-    width: 200px
+    flex: 1 1 25%
+    min-width: 200px
     aspect-ratio: 0.8
     mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.2))
     @include mq(s)
@@ -126,8 +130,11 @@ const classes = computed(() => {
   .info
     display: flex
     flex-direction: column
+    flex: 1 1 75%
     gap: $offset-5xs
     overflow: hidden
+    @include mq(s)
+    gap: $offset-3xs
     .title
       @include font(2rem, 300, 100%)
       @include transition
@@ -143,6 +150,9 @@ const classes = computed(() => {
         span
           text-wrap: nowrap
           color: $text-color-inactive
+      .portion
+        @include font($font-size-2xl, 300)
+        color: $text-color-inactive
     div
       span
         height: min-content
@@ -153,8 +163,21 @@ const classes = computed(() => {
       align-items: center
       gap: $offset-3xs
       margin-top: auto
+      .button-reduce,
+      .button-add
+        @include font(1.25rem, 300)
+        width: 42px
       .quantity
+        @include font($font-size-2xl, 300)
         @include transition
+        display: flex
+        align-items: center
+        justify-content: center
+        min-width: 42px
+      .price
+        @include font($font-size-2xl, 300)
+        margin-left: auto
+        text-wrap: nowrap
 
     .hide-calculations
       .button-reduce,

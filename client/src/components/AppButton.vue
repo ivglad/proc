@@ -48,8 +48,9 @@ const classes = computed(() => {
   justify-content: center
   width: 100%
   min-width: min-content
-  height: 46px
+  height: 42px
   padding: 12px 15px 15px 15px
+  margin: 1px
   cursor: pointer
   outline: none
   border: none

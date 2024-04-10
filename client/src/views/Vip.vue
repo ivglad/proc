@@ -17,7 +17,11 @@ const router = useRouter()
             <img src="../assets/img/vip/movies-logo.jpg" alt="Фильмы" />
           </picture>
         </div>
-        <div class="text">Может<br />кино?</div>
+        <div class="text">
+          Может
+          <br class="break" />
+          кино?
+        </div>
       </div>
       <div class="products" @click="router.push('/vip/products')">
         <div class="title">Меню</div>
@@ -29,7 +33,11 @@ const router = useRouter()
             <img src="../assets/img/vip/products-logo.jpg" alt="Еда" />
           </picture>
         </div>
-        <div class="text">Хочу<br />есть!</div>
+        <div class="text">
+          Хочу
+          <br class="break" />
+          есть!
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +57,8 @@ const router = useRouter()
   justify-content: center
   max-height: inherit
   gap: $offset-2xs
+  @include mq(s)
+    flex-direction: column
   .movies,
   .products
     @include background
@@ -57,6 +67,7 @@ const router = useRouter()
     flex-direction: column
     flex: 1 1 100%
     gap: $offset-2xs
+    min-width: 140px
     aspect-ratio: 0.6
     padding: $offset-3xs
     cursor: pointer
@@ -67,9 +78,10 @@ const router = useRouter()
       .img img
         @include transition-enter
         opacity: 1
+    @include mq(s)
+      gap: $offset-4xs
     .title
       @include font(3rem, 200)
-      @include transition
       display: flex
       width: fit-content
       text-transform: uppercase
@@ -96,21 +108,19 @@ const router = useRouter()
       align-self: end
       text-align: end
       text-transform: uppercase
-      // -webkit-background-clip: text
-      // -webkit-text-fill-color: transparent
-      // background-clip: text
+      .break
+        @include mq(s)
+          display: none
   .movies
     .title
       color: $text-color-active
     .text
       color: $text-color-active
       mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
-      // background-image: linear-gradient(135deg, $text-color-active, transparent)
   .products
     .title
       color: $text-color-error
     .text
       color: $text-color-error
       mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
-      // background-image: linear-gradient(135deg, $text-color-error, transparent)
 </style>
