@@ -12,6 +12,9 @@ const props = defineProps({
 
 const emit = defineEmits(['update:product'])
 
+const isSelected = ref(false)
+const showCalculations = ref(false)
+
 const addQuantity = () => {
   emit('update:product', {
     ...props.product,
@@ -20,6 +23,10 @@ const addQuantity = () => {
 }
 const reduceQuantity = () => {
   if (props.product.quantity < 1) return
+  if (props.product.quantity == 1) {
+    isSelected.value = false
+    showCalculations.value = false
+  }
   emit('update:product', {
     ...props.product,
     quantity: props.product.quantity - 1,
@@ -32,13 +39,21 @@ const finalPrice = computed(() => {
     : props.product.price * props.product.quantity
 })
 
-const isSelected = ref(false)
-const showCalculations = ref(false)
-
 const selectProduct = () => {
   if (isSelected.value && props.product.quantity < 1) {
     isSelected.value = false
     showCalculations.value = false
+    return
+  }
+  if (isSelected.value && props.product.quantity > 0) {
+    isSelected.value = false
+    showCalculations.value = false
+    setTimeout(() => {
+      emit('update:product', {
+        ...props.product,
+        quantity: 0,
+      })
+    }, 200)
     return
   }
   if (props.product.quantity == 0) {
@@ -53,6 +68,8 @@ const classes = computed(() => {
     'product-select': isSelected.value,
   }
 })
+
+console.log(isSelected.value)
 </script>
 
 <template>
@@ -85,11 +102,11 @@ const classes = computed(() => {
           class="button-reduce"
           :disabled="product.quantity < 1"
           title="-"
-          @click="reduceQuantity" />
+          @click.stop="reduceQuantity" />
         <div class="quantity">
           {{ product.quantity }}
         </div>
-        <AppButton class="button-add" title="+" @click="addQuantity" />
+        <AppButton class="button-add" title="+" @click.stop="addQuantity" />
         <div class="price">{{ finalPrice }} ₽</div>
       </div>
     </div>
@@ -163,6 +180,7 @@ const classes = computed(() => {
       align-items: center
       gap: $offset-3xs
       margin-top: auto
+      user-select: none
       .button-reduce,
       .button-add
         @include font(1.25rem, 300)
@@ -184,6 +202,7 @@ const classes = computed(() => {
       .button-add,
       .quantity
         opacity: 0
+        pointer-events: none
       .quantity
         @include transition-enter
 

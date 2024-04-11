@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     default: 'div',
   },
+  info: {
+    type: String,
+    default: '',
+  },
   size: {
     type: Number,
     default: 38,
@@ -29,17 +33,17 @@ const isInteractive = computed(() => {
 
 const classes = computed(() => {
   return {
-    icon: true,
-    'icon-bg': props.bg,
     [`icon-${props.name}`]: true,
+    'icon-bg': props.bg,
     'icon-interactive': isInteractive.value,
   }
 })
 </script>
 
 <template>
-  <component :is="type" :class="classes">
+  <component :is="type" class="icon" :class="classes">
     <SvgIcon />
+    <div class="info" v-if="props.info">{{ props.info }}</div>
   </component>
 </template>
 
@@ -63,12 +67,22 @@ const classes = computed(() => {
   &-active
     @include transition-enter
     color: $element-color-active
-
   svg
     position: absolute
     transform-origin: 50%
     transform: scale(calc(v-bind(size) / 46))
-
   &-interactive
     cursor: pointer
+  .info
+    @include background(default, 5)
+    @include font(0.75rem, 400)
+    position: absolute
+    bottom: calc(100% - 10px)
+    left: calc(100% - 10px)
+    min-width: 20px
+    height: 20px
+    padding: 2px
+    box-shadow: none
+    border-radius: 8px
+    border: 1px solid $border-color-default
 </style>

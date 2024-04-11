@@ -122,6 +122,7 @@ $controlPanelHeight: 72px
   cursor: default
   &:hover,
   &:focus
+    color: $text-color-default
     cursor: default
     box-shadow: 0px 0px 0.4px 1px $border-color-default
     background: transparent
@@ -161,7 +162,7 @@ html *
 button,
 input,
 textarea
-  @include font
+  @include font-base
   outline: none
   border: none
   background: none
