@@ -119,8 +119,8 @@ const router = useRouter()
       mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
   .products
     .title
-      color: $text-color-error
+      color: $text-color-food
     .text
-      color: $text-color-error
+      color: $text-color-food
       mask-image: linear-gradient(135deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2))
 </style>

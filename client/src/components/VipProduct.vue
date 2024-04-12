@@ -1,9 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import AppButton from '@/components/AppButton.vue'
+import AppIcon from '@/components/AppIcon.vue'
 
 components: {
   AppButton
+  AppIcon
 }
 
 const props = defineProps({
@@ -14,6 +16,13 @@ const emit = defineEmits(['update:product'])
 
 const isSelected = ref(false)
 const showCalculations = ref(false)
+
+onBeforeMount(() => {
+  if (props.product.quantity > 0) {
+    isSelected.value = true
+    showCalculations.value = true
+  }
+})
 
 const addQuantity = () => {
   emit('update:product', {
@@ -34,9 +43,10 @@ const reduceQuantity = () => {
 }
 
 const finalPrice = computed(() => {
+  if (!props.product.price) return 'Цена неизвестна'
   return props.product.quantity < 1
-    ? props.product.price
-    : props.product.price * props.product.quantity
+    ? `${props.product.price} ₽`
+    : `${props.product.price * props.product.quantity} ₽`
 })
 
 const selectProduct = () => {
@@ -68,8 +78,6 @@ const classes = computed(() => {
     'product-select': isSelected.value,
   }
 })
-
-console.log(isSelected.value)
 </script>
 
 <template>
@@ -87,27 +95,39 @@ console.log(isSelected.value)
         {{ product.title }}
       </div>
       <div class="info__top">
-        <div class="description">
-          {{ product.description }}
-        </div>
-        <div class="portion">
+        <div class="portion" v-if="product.portion">
           <span>Порция:</span>
           {{ product.portion }}
         </div>
       </div>
+      <div class="info__bottom">
+        <div class="description" v-if="product.description">
+          <span>Описание:</span>
+          {{ product.description }}
+        </div>
+      </div>
       <div
-        class="info__bottom"
+        class="info__actions"
         :class="{ 'hide-calculations': !showCalculations }">
-        <AppButton
+        <AppIcon
+          name="minus"
+          type="button"
           class="button-reduce"
           :disabled="product.quantity < 1"
-          title="-"
           @click.stop="reduceQuantity" />
         <div class="quantity">
           {{ product.quantity }}
         </div>
-        <AppButton class="button-add" title="+" @click.stop="addQuantity" />
-        <div class="price">{{ finalPrice }} ₽</div>
+        <AppIcon
+          name="plus"
+          type="button"
+          class="button-add"
+          @click.stop="addQuantity" />
+        <div
+          class="price"
+          :class="{ 'price-unknown': finalPrice === 'Цена неизвестна' }">
+          {{ finalPrice }}
+        </div>
       </div>
     </div>
   </div>
@@ -128,10 +148,10 @@ console.log(isSelected.value)
     gap: $offset-3xs
     max-height: 35rem
   @include active
-    @include background-active-error
+    @include background-active-food
     .title
       @include transition-enter
-      color: $text-color-error
+      color: $text-color-food
   .img
     flex: 1 1 25%
     min-width: 200px
@@ -150,15 +170,14 @@ console.log(isSelected.value)
     flex: 1 1 75%
     gap: $offset-5xs
     overflow: hidden
-    @include mq(s)
-    gap: $offset-3xs
     .title
-      @include font(2rem, 300, 100%)
+      @include font($font-size-2xl, 300)
       @include transition
       padding-right: clamp($offset-4xs, $index, $offset-xs)
       padding-bottom: $offset-3xs
     &__top
       display: flex
+      flex-direction: column
       flex-wrap: wrap
       gap: $offset-5xs
       max-width: 100%
@@ -167,24 +186,34 @@ console.log(isSelected.value)
         span
           text-wrap: nowrap
           color: $text-color-inactive
-      .portion
-        @include font($font-size-2xl, 300)
-        color: $text-color-inactive
     div
       span
         height: min-content
         text-wrap: nowrap
         color: $text-color-inactive
     &__bottom
+      overflow-y: auto
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 10%)
+      .description
+        padding-right: clamp($offset-5xs, $index, $offset-xs)
+        padding-bottom: $offset-3xs
+    &__actions
       display: flex
       align-items: center
       gap: $offset-3xs
       margin-top: auto
       user-select: none
+      @include mq(m)
+        gap: $offset-5xs
+      @include mq(s)
+        gap: $offset-3xs
       .button-reduce,
       .button-add
-        @include font(1.25rem, 300)
+        @include font($font-size-2xl, 300)
         width: 42px
+        @include active
+          @include background-active-food
+          color: $text-color-food
       .quantity
         @include font($font-size-2xl, 300)
         @include transition
@@ -196,6 +225,10 @@ console.log(isSelected.value)
         @include font($font-size-2xl, 300)
         margin-left: auto
         text-wrap: nowrap
+        &-unknown
+          @include font($font-size-m, 300)
+          color: $text-color-inactive
+          text-wrap: wrap
 
     .hide-calculations
       .button-reduce,
@@ -207,8 +240,10 @@ console.log(isSelected.value)
         @include transition-enter
 
   &-select
-    @include background-active-error
-    .title
+    @include background-active-food
+    .title,
+    .quantity,
+    .price
       @include transition-enter
-      color: $text-color-error
+      color: $text-color-food
 </style>

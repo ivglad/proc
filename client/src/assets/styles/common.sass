@@ -28,12 +28,11 @@ $index: calc(1vw + 1vh)
 
 $controlPanelHeight: 72px
 
-// Hover
+// Active element
 @mixin active()
   @media (hover: none)
     @include transition
     -webkit-tap-highlight-color: transparent
-    cursor: pointer
     &:active,
     &:focus
       @include transition-enter
@@ -71,11 +70,8 @@ $controlPanelHeight: 72px
 
 @mixin background($type: default, $blur: 0)
   position: relative
-  // backface-visibility: hidden
-  // transform-origin: 50% 50%
-  // transform: perspective(1px) translate3d(0, 0, 0)
   border-radius: $radius-default
-  box-shadow: 0px 0px 0.4px 1px $border-color-default
+  border: 1px solid $border-color-input
   background: $background-default
   @if $type == default
     @if $blur != 0
@@ -91,59 +87,59 @@ $controlPanelHeight: 72px
 
 @mixin background-active($type: default, $blur: 0)
   @include background($type, $blur)
-  box-shadow: 0px 0px 0.4px 1px $border-color-active
+  border: 1px solid $border-color-active
   background: $background-active
 
 @mixin background-active-error($type: default, $blur: 0)
   @include background($type, $blur)
-  box-shadow: 0px 0px 0.4px 1px $border-color-error
+  border: 1px solid $border-color-error
   background: $background-error
+
+@mixin background-active-food($type: default, $blur: 0)
+  @include background($type, $blur)
+  border: 1px solid $border-color-food
+  background: $background-food
 
 @mixin background-button($type: default, $blur: 0)
   @include background($type, $blur)
   cursor: pointer
-  &:hover,
-  &:focus
+  @include active
     color: $text-color-active
-    box-shadow: 0px 0px 0.4px 1px $border-color-active
+    border: 1px solid $border-color-active
     background: $background-active
 
 @mixin background-button-inline($type: default, $blur: 0)
   @include background($type, $blur)
   background: transparent
   cursor: pointer
-  &:hover,
-  &:focus
+  @include active
     background: transparent
 
 @mixin background-button-disabled($type: default, $blur: 0)
   @include background($type, $blur)
   background: transparent
   cursor: default
-  &:hover,
-  &:focus
+  @include active
     color: $text-color-default
     cursor: default
-    box-shadow: 0px 0px 0.4px 1px $border-color-default
+    border: 1px solid $border-color-input
     background: transparent
 
 @mixin background-input($type: default, $blur: 0)
   @include background($type, $blur)
-  box-shadow: 0px 0px 0.4px 1px $border-color-default-input
+  border: 1px solid $border-color-input
   background: $background-input
   cursor: pointer
-  &:hover,
-  &:focus
-    box-shadow: 0px 0px 0.4px 1px $border-color-active
+  @include active
+    border: 1px solid $border-color-active
 
 @mixin background-input-error($type: default, $blur: 0)
   @include background($type, $blur)
-  box-shadow: 0px 0px 0.4px 1px $border-color-error
+  border: 1px solid $border-color-error
   background: $background-input
   cursor: pointer
-  &:hover,
-  &:focus
-    box-shadow: 0px 0px 0.4px 1px $border-color-error
+  @include active
+    border: 1px solid $border-color-error
 
 ::selection
   background: $select-color

@@ -13,6 +13,7 @@ components: {
 }
 
 const router = useRouter()
+
 const userStore = useUserStore()
 const vipPlayerStore = useVipPlayerStore()
 const player = vipPlayerStore.player
@@ -49,14 +50,24 @@ const cartSumm = computed(() => {
           <AppIcon
             name="home"
             type="button"
+            :class="{
+              'icon-active':
+                router.currentRoute.value.path === userStore.user.homePage,
+            }"
             @click="router.push(`${userStore.user.homePage}`)" />
           <AppIcon
             name="movies"
             type="button"
+            :class="{
+              'icon-active': router.currentRoute.value.path === '/vip/movies',
+            }"
             @click="router.push('/vip/movies')" />
           <AppIcon
             name="food"
             type="button"
+            :class="{
+              'icon-active': router.currentRoute.value.path === '/vip/products',
+            }"
             @click="router.push('/vip/products')" />
         </div>
         <div class="center-block">
@@ -68,20 +79,20 @@ const cartSumm = computed(() => {
             type="button"
             :info="cartCounter > 0 ? `${cartCounter}` : ''"
             @click="showCart = !showCart" />
-          <div class="cart" v-if="showCart">
-            <div class="summ">
-              <span>Сумма:</span>
-              {{ cartSumm }} ₽
-            </div>
-            <div class="quantity">
-              <span>Позиций:</span>
-              {{ cartCounter }}
-            </div>
-            <AppButton class="cart-button" title="Заказать" />
-          </div>
         </div>
       </section>
       <section class="second-section">
+        <div class="cart" v-if="showCart">
+          <div class="summ">
+            <span>Сумма:</span>
+            {{ cartSumm }} ₽
+          </div>
+          <div class="quantity">
+            <span>Позиций:</span>
+            {{ cartCounter }}
+          </div>
+          <AppButton class="cart-button" title="Заказать" />
+        </div>
         <VipPlayer v-if="player.mode === 'show'" class="show" />
       </section>
     </div>
@@ -106,7 +117,7 @@ const cartSumm = computed(() => {
   align-items: center
   width: $container-width
   max-width: 1000px
-  background: rgba(36, 36, 36, 0.7)
+  background: $background-dark
   @include mq(xs)
     width: 100%
   .main-section
@@ -138,34 +149,39 @@ const cartSumm = computed(() => {
     .third-block
       @include mq(s)
         order: 3
-      .cart
-        @include background(blur, 80)
-        position: absolute
-        bottom: calc(100% + $offset-3xs)
-        right: 0
-        display: flex
-        flex-direction: column
-        gap: $offset-5xs
-        min-width: 12rem
-        padding: $offset-3xs
-        .summ,
-        .quantity
-          display: flex
-          // align-self: start
-          justify-content: space-between
-          width: 100%
-          gap: $offset-5xs
-          span
-            text-wrap: nowrap
-            color: $text-color-inactive
-        .cart-button
-          margin-top: $offset-3xs
-
   .second-section
     position: absolute
+    left: -1px
     bottom: calc(100% + $offset-3xs)
     display: flex
-    width: 100%
+    flex-direction: column
+    gap: $offset-3xs
+    width: calc(100% + 2px)
     @include mq(m)
       bottom: calc(100% + $offset-4xs)
+      gap: $offset-4xs
+    .cart
+      @include background(blur, 80)
+      display: flex
+      flex-direction: column
+      align-self: end
+      gap: $offset-5xs
+      width: 12rem
+      padding: $offset-3xs
+      background: $background-dark
+      @include mq(m)
+        bottom: calc(100% + $offset-4xs)
+      @include mq(s)
+        width: calc(100% + 2px)
+      .summ,
+      .quantity
+        display: flex
+        justify-content: space-between
+        width: 100%
+        gap: $offset-5xs
+        span
+          text-wrap: nowrap
+          color: $text-color-inactive
+      .cart-button
+        margin-top: $offset-3xs
 </style>

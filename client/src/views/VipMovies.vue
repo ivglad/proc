@@ -27,4 +27,6 @@ const movies = vipMoviesStore.movies
   max-width: 1200px
   margin-top: auto
   margin-bottom: auto
+  @include mq(s)
+    grid-auto-rows: auto
 </style>

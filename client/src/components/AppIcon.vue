@@ -43,7 +43,9 @@ const classes = computed(() => {
 <template>
   <component :is="type" class="icon" :class="classes">
     <SvgIcon />
-    <div class="info" v-if="props.info">{{ props.info }}</div>
+    <Transition name="blur" mode="out-in">
+      <div class="info" v-show="props.info">{{ props.info }}</div>
+    </Transition>
   </component>
 </template>
 
@@ -67,22 +69,22 @@ const classes = computed(() => {
   &-active
     @include transition-enter
     color: $element-color-active
+  &-interactive
+    cursor: pointer
   svg
     position: absolute
     transform-origin: 50%
     transform: scale(calc(v-bind(size) / 46))
-  &-interactive
-    cursor: pointer
   .info
-    @include background(default, 5)
+    @include background-active(default, 20)
     @include font(0.75rem, 400)
     position: absolute
     bottom: calc(100% - 10px)
     left: calc(100% - 10px)
     min-width: 20px
     height: 20px
-    padding: 2px
-    box-shadow: none
+    padding: 1px 2px 2px 2px
+    color: $text-color-active
     border-radius: 8px
-    border: 1px solid $border-color-default
+    border: 1px solid $border-color-active
 </style>

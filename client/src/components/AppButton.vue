@@ -42,7 +42,7 @@ const classes = computed(() => {
 <style lang="sass" scoped>
 .button
   @include background-button
-  @include transition
+  @include active
   display: flex
   align-items: center
   justify-content: center
@@ -50,15 +50,12 @@ const classes = computed(() => {
   min-width: min-content
   height: 42px
   padding: 12px 15px 15px 15px
-  margin: 1px
   cursor: pointer
   outline: none
-  border: none
+  border: 1px solid $border-color-default
   color: $text-color-default
   user-select: none
   text-wrap: nowrap
-  &:hover
-    @include transition-enter
   &-inline
     @include background-button-inline
   &-disabled

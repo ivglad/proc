@@ -88,7 +88,7 @@ const router = useRouter()
     gap: $offset-5xs
     overflow: hidden
     .title
-      @include font(2rem, 300, 100%)
+      @include font($font-size-2xl, 300)
       @include transition
       padding-right: clamp($offset-4xs, $index, $offset-xs)
       padding-bottom: $offset-3xs
@@ -115,7 +115,7 @@ const router = useRouter()
     &__bottom
       overflow-y: auto
       mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 10%)
-    .description
-      padding-right: clamp($offset-5xs, $index, $offset-xs)
-      padding-bottom: $offset-3xs
+      .description
+        padding-right: clamp($offset-5xs, $index, $offset-xs)
+        padding-bottom: $offset-3xs
 </style>
