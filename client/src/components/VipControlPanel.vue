@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/userStore'
 import { useVipPlayerStore } from '@/store/vipPlayerStore'
 import { useVipProductsStore } from '@/store/vipProductsStore'
+import { useLogoutUser } from '@/helpers/queries'
 
 components: {
   AppButton, AppIcon
@@ -39,6 +40,25 @@ const cartSumm = computed(() => {
   })
   return summ
 })
+
+const showUserSettings = ref(false)
+const logoutUserMutation = useLogoutUser()
+const logout = async () => {
+  logoutUserMutation.mutate(
+    {
+      email: signinData.value.email.value,
+      password: signinData.value.password.value,
+    },
+    {
+      onError: (error) => {
+        
+      },
+      onSuccess: (data) => {
+        
+      },
+    },
+  )
+}
 </script>
 
 <template>
@@ -46,7 +66,10 @@ const cartSumm = computed(() => {
     <div class="control-panel">
       <section class="main-section">
         <div class="first-block">
-          <AppIcon name="user" type="button" />
+          <AppIcon
+            name="user"
+            type="button"
+            @click="showUserSettings = !showUserSettings" />
           <AppIcon
             name="home"
             type="button"
@@ -82,7 +105,7 @@ const cartSumm = computed(() => {
         </div>
       </section>
       <section class="second-section">
-        <div class="cart" v-if="showCart">
+        <div v-if="showCart" class="cart">
           <div class="summ">
             <span>Сумма:</span>
             {{ cartSumm }} ₽
@@ -94,6 +117,10 @@ const cartSumm = computed(() => {
           <AppButton class="cart-button" title="Заказать" />
         </div>
         <VipPlayer v-if="player.mode === 'show'" class="show" />
+        <div v-if="showUserSettings" class="user-settings">
+          <AppButton class="user-profile" title="Профиль" />
+          <AppButton class="user-logout-button" title="Выход" />
+        </div>
       </section>
     </div>
   </nav>
@@ -184,4 +211,7 @@ const cartSumm = computed(() => {
           color: $text-color-inactive
       .cart-button
         margin-top: $offset-3xs
+    .user
+      &-settings
+        @include background(blur, 80)
 </style>
