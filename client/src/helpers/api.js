@@ -35,7 +35,8 @@ api.interceptors.response.use(
       error.response.statusText === 'Unauthorized' &&
       user &&
       !originalConfig._retry &&
-      originalConfig.url !== '/api/auth/signin'
+      originalConfig.url !== '/api/auth/signin' &&
+      originalConfig.url !== '/api/auth/logout'
     ) {
       originalConfig._retry = true
       try {
@@ -50,7 +51,7 @@ api.interceptors.response.use(
 
         return api.request(originalConfig)
       } catch (e) {
-        userStore.$patch({ user: null })
+        userStore.resetUser()
         return Promise.reject(error)
       }
     }

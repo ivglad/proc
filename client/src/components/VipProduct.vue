@@ -102,7 +102,7 @@ const classes = computed(() => {
       </div>
       <div class="info__bottom">
         <div class="description" v-if="product.description">
-          <span>Описание:</span>
+          <!-- <span>Описание:</span> -->
           {{ product.description }}
         </div>
       </div>

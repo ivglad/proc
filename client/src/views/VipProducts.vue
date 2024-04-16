@@ -1,5 +1,4 @@
 <script setup>
-import { watch } from 'vue'
 import { useVipProductsStore } from '@/store/vipProductsStore'
 import VipProduct from '@/components/VipProduct.vue'
 

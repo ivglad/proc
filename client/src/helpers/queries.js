@@ -27,8 +27,8 @@ export const useSigninUser = () => {
 
 export const useLogoutUser = () => {
   return useMutation({
-    mutationFn: (data) => {
-      return api.post('/api/auth/logout', data)
+    mutationFn: () => {
+      return api.get('/api/auth/logout')
     },
     onMutate: (variables) => {},
     onError: (error, variables, context) => {},

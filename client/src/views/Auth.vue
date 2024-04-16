@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, watch, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/userStore'
 import { useSignupUser, useSigninUser } from '@/helpers/queries'
@@ -208,11 +208,14 @@ const signup = async () => {
           <div class="buttons">
             <AppButton
               class="signup-button"
-              type="submit"
               title="Регистрация"
               styleType="inline"
               @click="changeForm" />
-            <AppButton class="signin-button" title="Вход" @click="signin" />
+            <AppButton
+              class="signin-button"
+              title="Вход"
+              type="submit"
+              @click="signin" />
           </div>
         </form>
         <form v-else-if="formState === 'signup'" class="form" key="signun">
@@ -263,21 +266,22 @@ const signup = async () => {
   display: flex
   align-items: center
   justify-content: center
-  width: 100%
+  width: max(24rem, 100%)
   height: 100%
 
 .form
   @include transition
   display: flex
   flex-direction: column
-  gap: $offset-m
+  gap: $offset-s
+  width: 100%
   &-wrap
-    @include background(blur, 20)
+    @include background
     display: flex
     flex-direction: column
-    gap: $offset-m
-    padding: $offset-m
-    min-width: 400px
+    gap: $offset-s
+    padding: $offset-s
+    width: 100%
     .title
       display: flex
       flex-wrap: wrap
@@ -292,26 +296,21 @@ const signup = async () => {
         color: $text-color-default
       &-separator
         color: $text-color-default
-        // color: $text-color-inactive
 
   .inputs
     display: flex
     flex-direction: column
-    gap: $offset-xs
+    gap: $offset-2xs
     &-signup
       display: flex
       flex-direction: column
       gap: $offset-xs
   .buttons
-    display: flex
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
     justify-content: space-between
     gap: $offset-xs
     flex-flow: row
-    .signup-button
-      // @include transition(all, 0.9s)
-      // order: 1
-    .signin-button
-      // order: 2
 
   &-signup
     .buttons

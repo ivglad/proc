@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import AppButton from '@/components/AppButton.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import VipPlayer from '@/components/VipPlayer.vue'
@@ -21,7 +21,29 @@ const player = vipPlayerStore.player
 const vipProductsStore = useVipProductsStore()
 const products = vipProductsStore.products
 
+const showUserSettings = ref(false)
+const watchUserSettings = (newValue) => {
+  if (!newValue) return
+  player.mode = 'hide'
+  showCart.value = false
+}
+watch(showUserSettings, watchUserSettings)
+
+const watchPlayerMode = (playerValue) => {
+  if (playerValue.mode !== 'show') return
+  showUserSettings.value = false
+  showCart.value = false
+}
+watch(player, watchPlayerMode, { deep: true })
+
 const showCart = ref(false)
+const watchShowCart = (newValue) => {
+  if (!newValue) return
+  showUserSettings.value = false
+  player.mode = 'hide'
+}
+watch(showCart, watchShowCart)
+
 const cartCounter = computed(() => {
   let counter = 0
   products.forEach((product) => {
@@ -41,23 +63,13 @@ const cartSumm = computed(() => {
   return summ
 })
 
-const showUserSettings = ref(false)
 const logoutUserMutation = useLogoutUser()
 const logout = async () => {
-  logoutUserMutation.mutate(
-    {
-      email: signinData.value.email.value,
-      password: signinData.value.password.value,
-    },
-    {
-      onError: (error) => {
-        
-      },
-      onSuccess: (data) => {
-        
-      },
-    },
-  )
+  try {
+    await logoutUserMutation.mutateAsync()
+  } catch (e) {}
+  userStore.resetUser()
+  router.push('/auth')
 }
 </script>
 
@@ -69,6 +81,9 @@ const logout = async () => {
           <AppIcon
             name="user"
             type="button"
+            :class="{
+              'icon-active': showUserSettings,
+            }"
             @click="showUserSettings = !showUserSettings" />
           <AppIcon
             name="home"
@@ -101,6 +116,9 @@ const logout = async () => {
             name="cart"
             type="button"
             :info="cartCounter > 0 ? `${cartCounter}` : ''"
+            :class="{
+              'icon-active': showCart,
+            }"
             @click="showCart = !showCart" />
         </div>
       </section>
@@ -119,7 +137,7 @@ const logout = async () => {
         <VipPlayer v-if="player.mode === 'show'" class="show" />
         <div v-if="showUserSettings" class="user-settings">
           <AppButton class="user-profile" title="Профиль" />
-          <AppButton class="user-logout-button" title="Выход" />
+          <AppButton class="user-logout-button" title="Выход" @click="logout" />
         </div>
       </section>
     </div>
@@ -196,8 +214,6 @@ const logout = async () => {
       width: 12rem
       padding: $offset-3xs
       background: $background-dark
-      @include mq(m)
-        bottom: calc(100% + $offset-4xs)
       @include mq(s)
         width: calc(100% + 2px)
       .summ,
@@ -214,4 +230,13 @@ const logout = async () => {
     .user
       &-settings
         @include background(blur, 80)
+        display: flex
+        flex-direction: column
+        align-self: start
+        gap: $offset-3xs
+        width: 12rem
+        padding: $offset-3xs
+        background: $background-dark
+        @include mq(s)
+          width: calc(100% + 2px)
 </style>

@@ -40,7 +40,8 @@ $controlPanelHeight: 72px
   @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
     @include transition
     cursor: pointer
-    &:hover
+    &:hover,
+    &:focus-visible
       @include transition-enter
       @content
 
