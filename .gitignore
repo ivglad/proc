@@ -1,7 +1,8 @@
+.vscode
 node_modules
 .env
 
-/services/*/data/*
-/services/*/logs/*
+services/*/data/*
+services/*/logs/*
 
-.vscode
+*/package-lock.json
