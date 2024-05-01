@@ -1,5 +1,5 @@
 .PHONY: env
-env: ## Установка переменных окружения
+env:
 	@echo "Установка переменных окружения..."
 	cp .env.example .env
 
@@ -10,3 +10,7 @@ up:
 .PHONY: down
 down:
 	docker compose down
+
+.PHONY: logs server
+logs:
+	docker compose logs -f server
