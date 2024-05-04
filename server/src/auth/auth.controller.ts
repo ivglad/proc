@@ -26,21 +26,18 @@ export class AuthController {
   }
 
   @Post('signin')
-  @HttpCode(HttpStatus.OK)
   signin(@Body() data: AuthDto) {
     return this.authService.signIn(data)
   }
 
   @Get('logout')
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK)
   logout(@Req() req: Request) {
     this.authService.logout(req.user['sub'])
   }
 
   @Get('refresh')
   @UseGuards(RefreshTokenGuard)
-  @HttpCode(HttpStatus.OK)
   refreshTokens(@Req() req: Request) {
     const userId = req.user['sub']
     const refreshToken = req.user['refreshToken']

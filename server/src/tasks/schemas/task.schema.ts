@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, Types } from 'mongoose'
 
 export type TaskDocument = Task & Document
 
@@ -11,11 +11,16 @@ class Schedule {
 
 @Schema({ collection: 'tasks', timestamps: true, autoCreate: true })
 export class Task {
-  @Prop({ required: true })
-  process: string
+  _id: Types.ObjectId
+
+  @Prop({ type: Types.ObjectId, ref: 'Process', index: true, default: '' })
+  processId: Types.ObjectId
+
+  @Prop({ type: Types.ObjectId, ref: 'User', index: true, required: true })
+  ownerId: Types.ObjectId
 
   @Prop({ required: true })
-  owner: string
+  title: string
 
   @Prop({ default: '' })
   group: string

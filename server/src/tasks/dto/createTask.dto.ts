@@ -1,13 +1,17 @@
+import { Types } from 'mongoose'
 import { IsNotEmpty, IsString, IsDate } from 'class-validator'
 
 export class CreateTaskDto {
-  @IsNotEmpty()
+  _id: Types.ObjectId
+
   @IsString()
-  process: string
+  processId: string
 
   @IsNotEmpty()
-  @IsString()
-  owner: string
+  ownerId: string
+
+  @IsNotEmpty()
+  title: string
 
   @IsString()
   group?: string
