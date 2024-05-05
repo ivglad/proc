@@ -16,12 +16,12 @@ export class TasksService {
     @InjectModel(Task.name) private taskModel: Model<TaskDocument>,
     private schedulerRegistry: SchedulerRegistry,
   ) {
-    this.tasksInit()
+    this.tasksInitHandler()
   }
 
   async create(createTaskDto: CreateTaskDto) {
     const createdTask = new this.taskModel(createTaskDto)
-    this.taskHandler(createTaskDto)
+    createdTask.status = 'disabled'
     return createdTask.save()
   }
 
@@ -29,16 +29,21 @@ export class TasksService {
     id: string,
     updateTaskDto: UpdateTaskDto,
   ): Promise<TaskDocument> {
-    this.taskHandler(updateTaskDto)
-
-    return this.taskModel
-      .findByIdAndUpdate(id, updateTaskDto, {
-        new: true,
-      })
+    const updatedTask = await this.taskModel
+      .findByIdAndUpdate(id, updateTaskDto, { new: true })
       .exec()
+    const task = this.taskHandler(updatedTask)
+    this.logger.debug(`update`, task)
+    return this.taskModel.findByIdAndUpdate(id, task).exec()
   }
 
   async remove(id: string): Promise<TaskDocument> {
+    const removeTaskStatus = this.removeTask(id)
+    if (!removeTaskStatus) {
+      this.logger.error(
+        `remove. ${id}: Remove task status - ${removeTaskStatus}`,
+      )
+    }
     return this.taskModel.findByIdAndDelete(id).exec()
   }
 
@@ -50,37 +55,79 @@ export class TasksService {
     return this.taskModel.findById(id)
   }
 
-  taskHandler(taskDto: UpdateTaskDto) {
-    this.logger.debug(taskDto._id)
-    // if (taskDto.status === 'enabled') {
-    //   this.addCronJob(taskDto)
-    // } else if (taskDto.status === 'disabled') {
-    //   this.deleteCronJob(taskDto._id)
-    // }
+  async findByStatus(searchStatus: string): Promise<TaskDocument[]> {
+    return this.taskModel.find({ status: searchStatus }).exec()
   }
 
-  async tasksInit() {
-    const tasks = await this.findAll()
+  async tasksInitHandler() {
+    const tasks = await this.findByStatus('enabled')
     tasks.forEach((task) => {
-      if (task.status !== 'enabled') return
-      try {
-        // this.addCronJob(task)
-      } catch (e) {
-        this.logger.error(`Task ${task.title}-${task._id} error: ${e.message}`)
-      }
+      this.startTask(task)
     })
   }
 
-  addCronJob(task: TaskDocument) {
-    const job = new CronJob(task.schedule.cron, () => {
-      this.logger.debug('task execute')
-    })
-
-    this.schedulerRegistry.addCronJob(task._id, job)
-    job.start()
+  taskHandler(task: TaskDocument): TaskDocument {
+    if (task.status === 'enabled') {
+      return this.startTask(task)
+    } else if (task.status === 'disabled') {
+      return this.stopTask(task)
+    }
+    return task
   }
 
-  deleteCronJob(taskId: string) {
-    this.schedulerRegistry.deleteCronJob(taskId)
+  startTask(task: TaskDocument): TaskDocument {
+    const taskId = task._id.toString()
+    try {
+      const job = new CronJob(task.schedule.cron, () => {
+        this.logger.debug(`Task execute. ${taskId}`)
+      })
+
+      this.schedulerRegistry.addCronJob(taskId, job)
+      job.start()
+
+      task.error.message = ''
+    } catch (e) {
+      this.logger.error(`startTask. ${taskId}: ${e.message}`)
+      task.status = 'error'
+      task.error.message = e.message
+    } finally {
+      return task
+    }
+  }
+
+  stopTask(task: TaskDocument): TaskDocument {
+    const taskId = task._id.toString()
+    try {
+      const jobs = this.schedulerRegistry.getCronJobs()
+      jobs.forEach((value, key, map) => {
+        if (key !== taskId) return
+        this.schedulerRegistry.deleteCronJob(taskId)
+      })
+
+      task.status = 'disabled'
+      task.error.message = ''
+    } catch (e) {
+      this.logger.error(`stopTask. ${taskId}: ${e.message}`)
+      task.status = 'error'
+      task.error.message = e.message
+    } finally {
+      return task
+    }
+  }
+
+  removeTask(taskId: string): boolean {
+    let status = true
+    try {
+      const jobs = this.schedulerRegistry.getCronJobs()
+      jobs.forEach((value, key, map) => {
+        if (key !== taskId) return
+        this.schedulerRegistry.deleteCronJob(taskId)
+      })
+    } catch (e) {
+      this.logger.error(`removeTask. ${taskId}: ${e.message}`)
+      status = false
+    } finally {
+      return status
+    }
   }
 }

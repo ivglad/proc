@@ -25,6 +25,12 @@ export class TasksController {
     return this.tasksService.create(createTaskDto)
   }
 
+  @Get(':id')
+  // @UseGuards(AccessTokenGuard)
+  findById(@Param('id') id: string) {
+    return this.tasksService.findById(id)
+  }
+
   @Patch(':id')
   // @UseGuards(AccessTokenGuard)
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
