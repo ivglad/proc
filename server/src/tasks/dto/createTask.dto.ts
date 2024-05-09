@@ -13,16 +13,22 @@ export class CreateTaskDto {
 
   @IsObject()
   @IsNotEmpty()
-  schedule: object
+  schedule: {
+    cron: string
+  }
 
   @IsObject()
-  error?: object
+  error?: {
+    activity: string
+    message: string
+    trace: string
+  }
 
   @IsNotEmpty()
-  ownerId: string
+  ownerId: Types.ObjectId
 
   @IsString()
-  processId: string
+  processId: Types.ObjectId
 
   @IsDate()
   createdAt?: Date

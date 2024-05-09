@@ -4,20 +4,22 @@ import { Document, Types } from 'mongoose'
 export type TaskDocument = Task & Document
 
 @Schema({ _id: false })
-class Schedule {
+export class TaskSchedule {
   @Prop({ required: true })
   cron: string
 }
 
 @Schema({ _id: false })
-export class Error {
+export class TaskError {
+  @Prop({ default: '' })
+  activity: string
+
   @Prop({ default: '' })
   message: string
 
   @Prop({ default: '' })
-  activity: string
+  trace: string
 }
-const ErrorSchema = SchemaFactory.createForClass(Error)
 
 @Schema({ collection: 'tasks', timestamps: true, autoCreate: true })
 export class Task {
@@ -30,11 +32,11 @@ export class Task {
   @Prop({ default: '' })
   group: string
 
-  @Prop({ type: Schedule, required: true })
-  schedule: Schedule
+  @Prop({ type: TaskSchedule, required: true })
+  schedule: TaskSchedule
 
-  @Prop({ type: ErrorSchema })
-  error: Error
+  @Prop({ type: TaskError, default: () => ({}) })
+  error: TaskError
 
   @Prop({ type: Types.ObjectId, ref: 'User', index: true, required: true })
   ownerId: Types.ObjectId
