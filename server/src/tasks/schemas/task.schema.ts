@@ -11,8 +11,8 @@ export class TaskSchedule {
 
 @Schema({ _id: false })
 export class TaskError {
-  @Prop({ default: '' })
-  activity: string
+  @Prop({ type: Types.ObjectId, default: '' })
+  activityId?: Types.ObjectId | ''
 
   @Prop({ default: '' })
   message: string
@@ -26,7 +26,11 @@ export class Task {
   @Prop({ unique: true, index: true, required: true })
   title: string
 
-  @Prop({ default: 'disabled' })
+  @Prop({
+    type: String,
+    default: 'disabled',
+    enum: ['disabled', 'enabled', 'error', 'not found'],
+  })
   status: string
 
   @Prop({ default: '' })
@@ -44,10 +48,10 @@ export class Task {
   @Prop({ type: Types.ObjectId, ref: 'Process', index: true, default: '' })
   processId: Types.ObjectId
 
-  @Prop({ default: Date.now })
+  @Prop({ default: new Date(), set: (v: Date) => new Date() })
   createdAt: Date
 
-  @Prop({ default: Date.now })
+  @Prop({ default: new Date(), set: (v: Date) => new Date() })
   updatedAt: Date
 }
 

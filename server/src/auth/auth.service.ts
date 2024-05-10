@@ -21,13 +21,13 @@ export class AuthService {
       createUserDto.email,
     )
     if (userEmailExists) {
-      throw new BadRequestException('Данный email уже занят')
+      throw new BadRequestException('Данный email уже существует')
     }
     const userNameExists = await this.usersService.findByUsername(
       createUserDto.username,
     )
     if (userNameExists) {
-      throw new BadRequestException('Данный никнейм уже занят')
+      throw new BadRequestException('Данный никнейм уже существует')
     }
 
     // Hash password

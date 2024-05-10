@@ -1,7 +1,7 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
-import { SchedulerRegistry, Cron } from '@nestjs/schedule'
+import { SchedulerRegistry } from '@nestjs/schedule'
 import { CronJob } from 'cron'
 import { CreateTaskDto } from './dto/createTask.dto'
 import { UpdateTaskDto } from './dto/updateTask.dto'
@@ -35,27 +35,47 @@ export class TasksService {
   }
 
   async create(createTaskDto: CreateTaskDto) {
-    const createdTask = new this.taskModel(createTaskDto)
-    createdTask.status = 'disabled'
-    return createdTask.save()
+    try {
+      const taskTitleExists = await this.findByTitle(createTaskDto.title, 'title')
+      if (taskTitleExists) {
+        throw new BadRequestException('Задача с таким именем уже существует')
+      }
+
+      const createdTask = new this.taskModel(createTaskDto)
+      createdTask.status = 'disabled'
+      const result = createdTask.save()
+      return result
+    } catch (e) {
+      throw new BadRequestException(
+        e.message,
+        'Ошибка создания задачи, проверьте корректность данных',
+      )
+    }
   }
 
   async update(
     id: string,
     updateTaskDto: UpdateTaskDto,
   ): Promise<TaskDocument> {
-    const handledUpdateTaskDto = await this.taskHandler(id, updateTaskDto)
-    const task = await this.taskModel
-      .findByIdAndUpdate(id, handledUpdateTaskDto, {
-        new: true,
-      })
-      .exec()
+    try {
+      const handledUpdateTaskDto = await this.taskHandler(id, updateTaskDto)
+      const task = await this.taskModel
+        .findByIdAndUpdate(id, handledUpdateTaskDto, {
+          new: true,
+        })
+        .exec()
 
-    if (task.status === 'error') {
-      throw new BadRequestException(task.error.message, task.error.trace)
+      if (task.status === 'error') {
+        throw new BadRequestException(task.error.message, task.error.trace)
+      }
+
+      return task
+    } catch (e) {
+      throw new BadRequestException(
+        e.message,
+        'Ошибка обновления задачи, проверьте корректность данных',
+      )
     }
-
-    return task
   }
 
   async taskHandler(
@@ -64,6 +84,11 @@ export class TasksService {
   ): Promise<UpdateTaskDto> {
     if (updateTaskDto?.status === 'enabled') {
       return await this.start(id, updateTaskDto)
+    } else if (updateTaskDto?.status !== 'error') {
+      updateTaskDto.error = {
+        message: '',
+        trace: '',
+      }
     }
     return await this.stop(id, updateTaskDto)
   }
@@ -86,34 +111,29 @@ export class TasksService {
         processId = processId ? processId : task?.processId
       }
 
+      this.removeCronJob(id)
+
       const job = new CronJob(cron, () => {
         this.logger.debug(`[start] Task ${id} execute`)
         // ProcessesService.start(processId) // TODO: call task
       })
-
-      const oldJob = this.getCronJob(id)
-      if (oldJob) {
-        oldJob.stop()
-        this.schedulerRegistry.deleteCronJob(id)
-      }
 
       this.schedulerRegistry.addCronJob(id, job)
       job.start()
 
       updateTaskDto.status = 'enabled'
       updateTaskDto.error = {
-        activity: '',
+        activityId: '',
         message: '',
         trace: '',
       }
     } catch (e) {
       updateTaskDto.status = 'error'
       updateTaskDto.error = {
-        activity: '',
         message: 'Невозможно запустить задачу (некорректная cron строка)',
         trace: e.message,
       }
-      this.logger.warn(`[startTask] ID:${id} - ${e.message}`)
+      this.logger.warn(`[start] ID:${id} - ${e.message}`)
     } finally {
       return updateTaskDto
     }
@@ -126,7 +146,7 @@ export class TasksService {
         oldJob.stop()
         updateTaskDto.status = 'disabled'
         updateTaskDto.error = {
-          activity: '',
+          activityId: '',
           message: '',
           trace: '',
         }
@@ -134,7 +154,6 @@ export class TasksService {
     } catch (e) {
       updateTaskDto.status = 'error'
       updateTaskDto.error = {
-        activity: '',
         message: 'Невозможно остановить задачу',
         trace: e.message,
       }
@@ -147,11 +166,7 @@ export class TasksService {
   async remove(id: string): Promise<boolean> {
     let status = true
     try {
-      const oldJob = this.getCronJob(id)
-      if (oldJob) {
-        oldJob.stop()
-        this.schedulerRegistry.deleteCronJob(id)
-      }
+      this.removeCronJob(id)
       await this.taskModel.findByIdAndDelete(id).exec()
     } catch (e) {
       status = false
@@ -169,11 +184,30 @@ export class TasksService {
     }
   }
 
+  removeCronJob(id: string): boolean {
+    try {
+      const job = this.getCronJob(id)
+      if (!job) return true
+      job.stop()
+      this.schedulerRegistry.deleteCronJob(id)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
   async findById(id: string): Promise<TaskDocument> {
     return this.taskModel.findById(id).exec()
   }
 
-  async findByStatus(searchStatus: string): Promise<TaskDocument[]> {
-    return this.taskModel.find({ status: searchStatus }).exec()
+  async findByStatus(status: string): Promise<TaskDocument[]> {
+    return this.taskModel.find({ status }).exec()
+  }
+
+  async findByTitle(
+    title: string,
+    projection?: object | string | [string],
+  ): Promise<TaskDocument> {
+    return this.taskModel.findOne({ title }, projection).exec()
   }
 }

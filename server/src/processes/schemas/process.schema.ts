@@ -1,23 +1,44 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, Types } from 'mongoose'
 
 export type ProcessDocument = Process & Document
 
+@Schema({ _id: false })
+export class ProcessError {
+  @Prop({ type: Types.ObjectId, ref: 'Activity', default: '' })
+  activityId: Types.ObjectId
+
+  @Prop({ default: '' })
+  message: string
+
+  @Prop({ default: '' })
+  trace: string
+}
+
 @Schema({ collection: 'processes', timestamps: true, autoCreate: true })
 export class Process {
-  @Prop({ required: true })
-  owner: string
+  @Prop({ unique: true, index: true, required: true })
+  title: string
+
+  @Prop({ default: '', enum: ['', 'running', 'paused', 'error'] })
+  status: string
 
   @Prop({ default: '' })
   group: string
 
-  @Prop({ default: '' })
-  task: string
+  @Prop({ type: Types.ObjectId, ref: 'User', index: true, required: true })
+  ownerId: Types.ObjectId
 
-  @Prop({ default: Date.now })
+  @Prop({ type: Types.ObjectId, ref: 'Task', index: true, default: '' })
+  taskId: Types.ObjectId
+
+  @Prop({ type: [ProcessError], default: () => [] })
+  activitiesErrors: [ProcessError]
+
+  @Prop({ default: new Date(), set: (v: Date) => new Date() })
   createdAt: Date
 
-  @Prop({ default: Date.now })
+  @Prop({ default: new Date(), set: (v: Date) => new Date() })
   updatedAt: Date
 }
 
