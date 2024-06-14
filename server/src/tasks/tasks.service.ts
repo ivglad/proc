@@ -22,15 +22,15 @@ export class TasksService {
   async init() {
     const tasks = await this.findByStatus('enabled')
     tasks.forEach(async (task) => {
-      const job = this.getCronJob(task._id)
+      const job = this.getCronJob(task.id)
       if (!job) {
         this.logger.warn(
-          `[init] ID:${task._id} - Задача не зарегистрирована. Изменение статуса в БД...`,
+          `[init] ID:${task.id} - Задача не зарегистрирована. Изменение статуса в БД...`,
         )
-        this.update(task._id, { status: 'not found' })
+        this.update(task.id, { status: 'not found' })
         return
       }
-      await this.start(task._id, task)
+      await this.start(task.id, task)
     })
   }
 

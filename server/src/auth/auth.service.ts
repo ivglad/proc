@@ -37,8 +37,8 @@ export class AuthService {
       password: hash,
     })
 
-    const tokens = await this.getTokens(newUser._id, newUser.email)
-    await this.updateRefreshToken(newUser._id, tokens.refreshToken)
+    const tokens = await this.getTokens(newUser.id, newUser.email)
+    await this.updateRefreshToken(newUser.id, tokens.refreshToken)
     return {
       username: newUser.username,
       name: newUser.name,
@@ -55,8 +55,8 @@ export class AuthService {
     if (!passwordMatches) {
       throw new BadRequestException('Неверный пароль')
     }
-    const tokens = await this.getTokens(user._id, user.email)
-    await this.updateRefreshToken(user._id, tokens.refreshToken)
+    const tokens = await this.getTokens(user.id, user.email)
+    await this.updateRefreshToken(user.id, tokens.refreshToken)
     return {
       username: user.username,
       name: user.name,
@@ -78,7 +78,7 @@ export class AuthService {
     await this.usersService.update(userId, { refreshToken: hashedRefreshToken })
   }
 
-  async getTokens(userId: string, email: string) {
+  async getTokens(userId: string | unknown, email: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -120,8 +120,8 @@ export class AuthService {
     if (!refreshTokenMatches) {
       throw new ForbiddenException('Недостаточно прав')
     }
-    const tokens = await this.getTokens(user._id, user.email)
-    await this.updateRefreshToken(user._id, tokens.refreshToken)
+    const tokens = await this.getTokens(user.id, user.email)
+    await this.updateRefreshToken(user.id, tokens.refreshToken)
     return tokens
   }
 }
