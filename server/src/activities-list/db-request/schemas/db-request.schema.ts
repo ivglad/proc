@@ -4,8 +4,11 @@ import { Activity } from '../../../activities/schemas/activity.schema'
 
 export type DbRequestDocument = DbRequest & Document
 
+export class DbRequestResponse {
+  response: unknown | null
+}
+
 @Schema({
-  _id: false,
   collection: 'activities',
   timestamps: true,
   autoCreate: true,
@@ -17,8 +20,8 @@ export class DbRequest extends Activity {
   @Prop({ default: () => [{}] })
   parameters: [unknown]
 
-  @Prop({ default: null })
-  result: unknown
+  @Prop({ type: DbRequestResponse, default: null })
+  response: DbRequestResponse
 }
 
 export const DbRequestSchema = SchemaFactory.createForClass(DbRequest)

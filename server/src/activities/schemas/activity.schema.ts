@@ -3,30 +3,34 @@ import { Document, Types } from 'mongoose'
 
 export type ActivityDocument = Activity & Document
 
-@Schema({ _id: false })
 export class ActivityOptions {
   @Prop({ default: false })
-  'try-catch'?: boolean
+  'try-catch': boolean
 
   @Prop({ default: false })
-  async?: boolean
+  async: boolean
 }
 
-@Schema({ collection: 'activities', timestamps: true, autoCreate: true })
+@Schema({
+  _id: false,
+  collection: 'activities',
+  timestamps: true,
+  autoCreate: true,
+})
 export class Activity {
-  @Prop({ type: Types.ObjectId, ref: 'Process', index: true, default: '' })
+  @Prop({ type: Types.ObjectId, ref: 'Process', index: true })
   processId: Types.ObjectId
 
-  @Prop({ unique: true, index: true, required: true })
+  @Prop({ required: true })
   title: string
 
   @Prop({ required: true })
   type: string
 
-  @Prop({ default: '' })
-  group: string
+  @Prop({ default: null })
+  group: string | null
 
-  @Prop({ required: true })
+  @Prop({ index: true, required: true })
   position: string
 
   @Prop({ type: ActivityOptions })

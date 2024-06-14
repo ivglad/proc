@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import { IsNotEmpty, IsArray, IsOptional } from 'class-validator'
 import { ActivityDto } from '../../../activities/dto/activity.dto'
 
-export class CreateDbRequestDto extends ActivityDto {
+export class DbRequestDto extends ActivityDto {
   @IsNotEmpty()
   method: string
 
@@ -10,5 +10,6 @@ export class CreateDbRequestDto extends ActivityDto {
   @IsOptional()
   parameters?: [unknown]
 
-  result?: unknown
+  @IsOptional()
+  response?: unknown
 }

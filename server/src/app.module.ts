@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { TasksModule } from './tasks/tasks.module'
 import { ProcessesModule } from './processes/processes.module'
-// import { ActivitiesModule } from './activities/activities.module'
+import { ActivitiesModule } from './activities/activities.module'
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { ProcessesModule } from './processes/processes.module'
     AuthModule,
     TasksModule,
     ProcessesModule,
-    // ActivitiesModule,
+    ActivitiesModule,
   ],
 })
 export class AppModule {}
