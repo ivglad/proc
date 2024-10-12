@@ -1,19 +1,31 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/userStore'
 import { useSignupUser, useSigninUser } from '@/helpers/queries'
-import AppButton from '@/components/AppButton.vue'
-import AppInput from '@/components/AppInput.vue'
-
-components: {
-  AppButton
-  AppInput
-}
 
 const userStore = useUserStore()
-
 const router = useRouter()
+
+const formData = ref({})
+const formInputs = ['email', 'password', 'passwordConfirm', 'username', 'name']
+const excludeValidationKeys = ref(['passwordConfirm', 'username', 'name'])
+const setFormData = () => {
+  formInputs.forEach((key) => {
+    formData.value[key] = {
+      value: null,
+      errors: [],
+      validation: null,
+    }
+    if (excludeValidationKeys.value.includes(key)) {
+      formData.value[key].validation = false
+      return
+    }
+  })
+}
+onBeforeMount(() => {
+  setFormData()
+})
 
 const signupData = ref({
   email: {
@@ -180,7 +192,27 @@ const signup = async () => {
 
 <template>
   <div class="auth">
-    <div class="form-wrap">
+    <div class="title">
+      <span>Войдите</span>
+      <span>или</span>
+      <span>зарегистрируйтесь</span>
+    </div>
+    <form class="form">
+      <InputText
+        placeholder="Email"
+        type="text"
+        v-model="formData.email.value" />
+      <Password
+        v-model="formData.password.value"
+        placeholder="Пароль"
+        :feedback="false"
+        toggleMask />
+    </form>
+    <div class="buttons">
+      <Button label="Регистрация" />
+      <Button label="Вход" />
+    </div>
+    <!-- <div class="form-wrap">
       <div class="title h1">
         <span
           :class="[formState === 'signin' ? 'title-active' : 'title-inactive']">
@@ -195,6 +227,18 @@ const signup = async () => {
       <Transition name="blur" mode="out-in">
         <form v-if="formState === 'signin'" class="form" key="signin">
           <div class="inputs">
+            <InputText
+              v-model="signinData.email.value"
+              placeholder="Email"
+              type="text"
+              variant="filled" />
+            <Password
+              v-model="signinData.password.value"
+              placeholder="Пароль"
+              :feedback="false"
+              variant="filled"
+              toggleMask />
+
             <AppInput
               v-model="signinData.email.value"
               v-model:errors="signinData.email.errors"
@@ -206,6 +250,8 @@ const signup = async () => {
               placeholder="Пароль" />
           </div>
           <div class="buttons">
+            <Button label="Регистрация" raised />
+            <Button label="Вход" raised />
             <AppButton
               class="signup-button"
               title="Регистрация"
@@ -257,67 +303,90 @@ const signup = async () => {
           </div>
         </form>
       </Transition>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <style lang="sass" scoped>
 .auth
   display: flex
-  align-items: center
-  justify-content: center
-  width: max(24rem, 100%)
-  height: 100%
-
-.form
-  @include transition
-  display: flex
   flex-direction: column
-  gap: $offset-s
-  width: 100%
-  &-wrap
-    @include background
+  gap: $size-40
+  padding: $size-40
+  .title
     display: flex
-    flex-direction: column
-    gap: $offset-s
-    padding: $offset-s
-    width: 100%
-    .title
-      display: flex
-      flex-wrap: wrap
-      gap: 0 5px
-      span:first-child
+    flex-wrap: wrap
+    gap: $size-5
+    span
+      &:first-child
         width: 100%
-      &-active
-        @include transition
-        color: $text-color-active
-      &-inactive
-        @include transition
-        color: $text-color-default
-      &-separator
-        color: $text-color-default
-
-  .inputs
+  .form
     display: flex
     flex-direction: column
-    gap: $offset-2xs
-    &-signup
-      display: flex
-      flex-direction: column
-      gap: $offset-xs
+    gap: $size-20
   .buttons
-    display: grid
-    grid-template-columns: repeat(2, 1fr)
+    display: flex
     justify-content: space-between
-    gap: $offset-xs
-    flex-flow: row
+    gap: $size-20
 
-  &-signup
-    .buttons
-      display: flex
-      flex-flow: row-reverse
-      .signup-button
-        // @include transition-enter(all, 0.9s)
-      .signin-button
-        // order: 1
+
+
+// .auth
+//   display: flex
+//   align-items: center
+//   justify-content: center
+//   width: max(24rem, 100%)
+//   height: 100%
+
+// .form
+//   @include transition
+//   display: flex
+//   flex-direction: column
+//   gap: $offset-s
+//   width: 100%
+//   &-wrap
+//     @include background
+//     display: flex
+//     flex-direction: column
+//     gap: $offset-s
+//     padding: $offset-s
+//     width: 100%
+//     .title
+//       display: flex
+//       flex-wrap: wrap
+//       gap: 0 5px
+//       span:first-child
+//         width: 100%
+//       &-active
+//         @include transition
+//         color: $text-color-active
+//       &-inactive
+//         @include transition
+//         color: $text-color-default
+//       &-separator
+//         color: $text-color-default
+
+//   .inputs
+//     display: flex
+//     flex-direction: column
+//     gap: $offset-2xs
+//     &-signup
+//       display: flex
+//       flex-direction: column
+//       gap: $offset-xs
+//   .buttons
+//     display: grid
+//     grid-template-columns: repeat(2, 1fr)
+//     justify-content: space-between
+//     gap: $offset-xs
+//     flex-flow: row
+
+//   &-signup
+//     .buttons
+//       display: flex
+//       flex-flow: row-reverse
+//       .signup-button
+//         // @include transition-enter(all, 0.9s)
+//       .signin-button
+//         // order: 1
 </style>

@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Получение списка серверов в бд", 
+    "type": "DbRequest",
+    "position": "1",
+    "variable": "servers"
+  },
+  {
+    "title": "Перебор серверов в бд",
+    "type": "ForEach",
+    "position": "2"
+  },
+  {
+    "title": "Проверка сессии",
+    "type": "IfElse",
+    "position": "2.1"
+  },
+  {
+    "title": "Получение данных сессии",
+    "type": "HttpRequest",
+    "position": "2.1.1",
+    "variable": "sessionData"
+  },
+  {
+    "title": "Cookies",
+    "type": "Assign",
+    "position": "2.1.2",
+    "variable": "cookies"
+  }
+]

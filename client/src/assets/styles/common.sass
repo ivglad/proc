@@ -2,48 +2,101 @@
 @use '@/assets/styles/fonts' as *
 @use '@/assets/styles/animations' as *
 
-// Offsets
-$offset-3xl: 8rem
-$offset-2xl: 6rem
-$offset-xl: 5rem
-$offset-l: 4rem
-$offset-m: 3rem
-$offset-s: 2rem
-$offset-xs: 1.25rem
-$offset-2xs: 1rem
-$offset-3xs: 0.75rem
-$offset-4xs: 0.5rem
-$offset-5xs: 0.25rem
 
-// Radius
-$radius-default: 14px
-$button-radius: 5px
-$line-radius: 1px
 
-// Container
-$container-width: clamp(50vw, 92vw, 1920px)
-$container-height: calc(100vh - 80px)
+// // Offsets
+@for $i from 0 through 120
+  @if $i % 5 == 0
+    .p-#{$i}
+      padding: #{$i}px
+    .pt-#{$i}
+      padding-top: #{$i}px
+    .pb-#{$i}
+      padding-bottom: #{$i}px
+    .pl-#{$i}
+      padding-left: #{$i}px
+    .pr-#{$i}
+      padding-right: #{$i}px
+    .ptb-#{$i}
+      padding-top: #{$i}px
+      padding-bottom: #{$i}px
+    .plr-#{$i}
+      padding-left: #{$i}px
+      padding-right: #{$i}px
 
-$index: calc(1vw + 1vh)
+    .m-#{$i}
+      margin: #{$i}px
+    .mt-#{$i}
+      margin-top: #{$i}px
+    .mb-#{$i}
+      margin-bottom: #{$i}px
+    .ml-#{$i}
+      margin-left: #{$i}px
+    .mr-#{$i}
+      margin-right: #{$i}px
+    .mtb-#{$i}
+      margin-top: #{$i}px
+      margin-bottom: #{$i}px
+    .mlr-#{$i}
+      margin-left: #{$i}px
+      margin-right: #{$i}px
 
-$controlPanelHeight: 72px
+$size-2: 0.2rem
+$size-4: 0.4rem
+$size-5: 0.5rem
+$size-6: 0.6rem
+$size-8: 0.8rem
+$size-10: 1rem
+$size-15: 1.5rem
+$size-20: 2rem
+$size-30: 3rem
+$size-40: 4rem
+$size-60: 6rem
+$size-80: 8rem
+$size-100: 10rem
+$size-120: 12rem
 
-// Active element
-@mixin active()
-  @media (hover: none)
-    @include transition
-    -webkit-tap-highlight-color: transparent
-    &:active,
-    &:focus
-      @include transition-enter
-      @content
-  @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
-    @include transition
-    cursor: pointer
-    &:hover,
-    &:focus-visible
-      @include transition-enter
-      @content
+// $offset-3xl: 8rem
+// $offset-2xl: 6rem
+// $offset-xl: 5rem
+// $offset-l: 4rem
+// $offset-m: 3rem
+// $offset-s: 2rem
+// $offset-xs: 1.25rem
+// $offset-2xs: 1rem
+// $offset-3xs: 0.75rem
+// $offset-4xs: 0.5rem
+// $offset-5xs: 0.25rem
+
+// // Radius
+// $radius-default: 14px
+// $button-radius: 5px
+// $line-radius: 1px
+
+// // Container
+// $container-width: clamp(50vw, 92vw, 1920px)
+// $container-height: calc(100vh - 80px)
+
+// $index: calc(1vw + 1vh)
+
+// $controlPanelHeight: 72px
+
+// // Active element
+// @mixin active()
+//   @media (hover: none)
+//     @include transition
+//     -webkit-tap-highlight-color: transparent
+//     &:active,
+//     &:focus
+//       @include transition-enter
+//       @content
+//   @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+//     @include transition
+//     cursor: pointer
+//     &:hover,
+//     &:focus-visible
+//       @include transition-enter
+//       @content
 
 // Media query
 @mixin mq($size)
@@ -69,105 +122,104 @@ $controlPanelHeight: 72px
     @media (max-width: #{$size}px)
       @content
 
-@mixin background($type: default, $blur: 0)
-  position: relative
-  border-radius: $radius-default
-  border: 1px solid $border-color-input
-  background: $background-default
-  @if $type == default
-    @if $blur != 0
-      backdrop-filter: blur(#{$blur}px)
-  @if $type == blur
-    &::before
-      content: ''
-      position: absolute
-      inset: 0
-      backdrop-filter: blur(#{$blur}px)
-      border-radius: $radius-default
-      z-index: -1
+// @mixin background($type: default, $blur: 0)
+//   position: relative
+//   border-radius: $radius-default
+//   border: 1px solid $border-color-input
+//   background: $background-default
+//   @if $type == default
+//     @if $blur != 0
+//       backdrop-filter: blur(#{$blur}px)
+//   @if $type == blur
+//     &::before
+//       content: ''
+//       position: absolute
+//       inset: 0
+//       backdrop-filter: blur(#{$blur}px)
+//       border-radius: $radius-default
+//       z-index: -1
 
-@mixin background-active($type: default, $blur: 0)
-  @include background($type, $blur)
-  border: 1px solid $border-color-active
-  background: $background-active
+// @mixin background-active($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   border: 1px solid $border-color-active
+//   background: $background-active
 
-@mixin background-active-error($type: default, $blur: 0)
-  @include background($type, $blur)
-  border: 1px solid $border-color-error
-  background: $background-error
+// @mixin background-active-error($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   border: 1px solid $border-color-error
+//   background: $background-error
 
-@mixin background-active-food($type: default, $blur: 0)
-  @include background($type, $blur)
-  border: 1px solid $border-color-food
-  background: $background-food
+// @mixin background-active-food($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   border: 1px solid $border-color-food
+//   background: $background-food
 
-@mixin background-button($type: default, $blur: 0)
-  @include background($type, $blur)
-  cursor: pointer
-  @include active
-    color: $text-color-active
-    border: 1px solid $border-color-active
-    background: $background-active
+// @mixin background-button($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   cursor: pointer
+//   @include active
+//     color: $text-color-active
+//     border: 1px solid $border-color-active
+//     background: $background-active
 
-@mixin background-button-inline($type: default, $blur: 0)
-  @include background($type, $blur)
-  background: transparent
-  cursor: pointer
-  @include active
-    background: transparent
+// @mixin background-button-inline($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   background: transparent
+//   cursor: pointer
+//   @include active
+//     background: transparent
 
-@mixin background-button-disabled($type: default, $blur: 0)
-  @include background($type, $blur)
-  background: transparent
-  cursor: default
-  @include active
-    color: $text-color-default
-    cursor: default
-    border: 1px solid $border-color-input
-    background: transparent
+// @mixin background-button-disabled($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   background: transparent
+//   cursor: default
+//   @include active
+//     color: $text-color-default
+//     cursor: default
+//     border: 1px solid $border-color-input
+//     background: transparent
 
-@mixin background-input($type: default, $blur: 0)
-  @include background($type, $blur)
-  border: 1px solid $border-color-input
-  background: $background-input
-  cursor: pointer
-  @include active
-    border: 1px solid $border-color-active
+// @mixin background-input($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   border: 1px solid $border-color-input
+//   background: $background-input
+//   cursor: pointer
+//   @include active
+//     border: 1px solid $border-color-active
 
-@mixin background-input-error($type: default, $blur: 0)
-  @include background($type, $blur)
-  border: 1px solid $border-color-error
-  background: $background-input
-  cursor: pointer
-  @include active
-    border: 1px solid $border-color-error
+// @mixin background-input-error($type: default, $blur: 0)
+//   @include background($type, $blur)
+//   border: 1px solid $border-color-error
+//   background: $background-input
+//   cursor: pointer
+//   @include active
+//     border: 1px solid $border-color-error
 
-::selection
-  background: $select-color
+// ::selection
+//   background: $select-color
 
-*::-webkit-scrollbar
-  width: 4px
-*::-webkit-scrollbar-track
-  background: transparent
-*::-webkit-scrollbar-thumb
-  background: $border-color-default
-  border-radius: $radius-default
-html *
-  // scrollbar-width: thin
-  scrollbar-color: $border-color-default
+// *::-webkit-scrollbar
+//   width: 4px
+// *::-webkit-scrollbar-track
+//   background: transparent
+// *::-webkit-scrollbar-thumb
+//   background: $border-color-default
+//   border-radius: $radius-default
+// html *
+//   // scrollbar-width: thin
+//   scrollbar-color: $border-color-default
 
 button,
 input,
 textarea
-  @include font-base
-  outline: none
-  border: none
-  background: none
-  color: $text-color-default
+  // @include font-base(1.4rem)
+  width: 100%
+button
+  text-wrap: nowrap
 
-  &:-internal-autofill-selected
-    // color: inherit !important
-    // background-color: transparent !important
+//   &:-internal-autofill-selected
+//     // color: inherit !important
+//     // background-color: transparent !important
 
 picture
   display: block

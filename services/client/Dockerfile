@@ -1,4 +1,4 @@
-FROM node:21-alpine
+FROM node:20-alpine
 
 RUN apk add --no-cache tini
 
@@ -17,8 +17,6 @@ ENV HOST 0.0.0.0
 RUN npm install
 
 RUN npm cache clean --force
-
-# RUN node node_modules/esbuild/install.js
 
 ENTRYPOINT ["/sbin/tini", "--"]
 

@@ -4,7 +4,7 @@ import { Activity, ActivitySchema } from './schemas/activity.schema'
 import {
   DbRequest,
   DbRequestSchema,
-  } from '../activities-list/db-request/schemas/db-request.schema'
+} from '../activities-list/db-request/schemas/db-request.schema'
 import { ActivitiesService } from './activities.service'
 import { ActivitiesController } from './activities.controller'
 
