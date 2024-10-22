@@ -15,6 +15,10 @@ up:
 down:
 	docker compose down
 
+.PHONY: restart
+restart:
+	docker compose restart
+
 .PHONY: logs server
 logs:
 	docker compose logs -f server

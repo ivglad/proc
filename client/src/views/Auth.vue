@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/userStore'
 import { useSignupUser, useSigninUser } from '@/helpers/queries'
@@ -8,18 +8,26 @@ const userStore = useUserStore()
 const router = useRouter()
 
 const formData = ref({})
-const formInputs = ['email', 'password', 'passwordConfirm', 'username', 'name']
-const excludeValidationKeys = ref(['passwordConfirm', 'username', 'name'])
-const setFormData = () => {
-  formInputs.forEach((key) => {
-    formData.value[key] = {
+const formFields = ['email', 'password', 'passwordConfirm', 'username', 'name']
+const defaultExcludeValidationKeys = ref([
+  'passwordConfirm',
+  'username',
+  'name',
+])
+const setFormData = (excludeValidationKeys = defaultExcludeValidationKeys) => {
+  formFields.forEach((field) => {
+    formData.value[field] = {
       value: null,
-      errors: [],
-      validation: null,
+      error: {
+        msg: null,
+        exists: computed(() =>
+          formData.value[field].error.msg ? true : false,
+        ),
+      },
+      validation: true,
     }
-    if (excludeValidationKeys.value.includes(key)) {
-      formData.value[key].validation = false
-      return
+    if (excludeValidationKeys.value.includes(field)) {
+      formData.value[field].validation = false
     }
   })
 }
@@ -27,112 +35,89 @@ onBeforeMount(() => {
   setFormData()
 })
 
-const signupData = ref({
-  email: {
-    value: '',
-    errors: [],
-  },
-  password: {
-    value: '',
-    errors: [],
-  },
-  passwordConfirm: {
-    value: '',
-    errors: [],
-  },
-  username: {
-    value: '',
-    errors: [],
-  },
-  name: {
-    value: '',
-    errors: [],
-  },
-})
-
-const signinData = ref({
-  email: {
-    value: '',
-    errors: [],
-  },
-  password: {
-    value: '',
-    errors: [],
-  },
-})
-
 const formState = ref('signin')
-
 const changeForm = () => {
   formState.value = formState.value === 'signin' ? 'signup' : 'signin'
 }
 
-const validator = (data) => {
+const clearFormData = (fields, clearValues = false) => {
+  if (typeof fields === 'string') {
+    fields = [fields]
+  }
+  fields?.forEach((field) => {
+    formData.value[field].error.msg = null
+    if (clearValues) {
+      formData.value[field].value = null
+    }
+  })
+}
+
+const validation = (data) => {
   let valid = true
-  const checkErrors = (key) => {
-    const value = data[key].value
-    let errors = data[key].errors
-    if (value === '') {
-      errors.push('Поле не может быть пустым')
+  const checkErrors = (field) => {
+    const value = data[field].value
+    const validation = data[field].validation
+    if (!validation) return
+
+    if (value === '' || value === null || value === undefined) {
+      data[field].error.msg = 'Поле не может быть пустым'
       valid = false
       return
     }
-    if (key === 'email') {
+    if (field === 'email') {
       const pattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
       if (!pattern.test(value)) {
-        errors.push('Некорректный email')
+        data[field].error.msg = 'Некорректный email'
         valid = false
       }
     }
-    if (key === 'password') {
-      if (value.length < 6) {
-        errors.push('Пароль должен быть более 6 символов')
+    if (field === 'password') {
+      if (value?.length < 6) {
+        data[field].error.msg = 'Пароль должен быть более 6 символов'
         valid = false
       }
     }
-    if (key === 'passwordConfirm') {
+    if (field === 'passwordConfirm') {
       if (data['password'].value !== value) {
-        errors.push('Пароли не совпадают')
+        data[field].error.msg = 'Пароли не совпадают'
         valid = false
       }
     }
-    if (key === 'username') {
-      if (value.length < 2) {
-        errors.push('Никнейм должен быть более 2 символов')
+    if (field === 'username') {
+      if (value?.length < 2) {
+        data[field].error.msg = 'Никнейм должен быть более 2 символов'
         valid = false
       }
     }
-    if (key === 'name') {
-      if (value.length < 2) {
-        errors.push('Имя должно быть более 2 символов')
+    if (field === 'name') {
+      if (value?.length < 2) {
+        data[field].error.msg = 'Имя должно быть более 2 символов'
         valid = false
       }
     }
   }
 
-  const keys = Object.keys(data)
-  const clearErrors = () => {
-    keys.forEach((key) => {
-      data[key].errors = []
-    })
-  }
-  clearErrors()
+  const fields = Object.keys(data)
+  clearFormData(fields)
 
-  keys.forEach((key) => {
-    checkErrors(key)
+  fields.forEach((field) => {
+    checkErrors(field)
   })
 
   return valid
 }
 
-const signinUserMutation = useSigninUser()
+const { mutate: signinUserMutation, isPending: signinUserIsPending } =
+  useSigninUser()
 const signin = async () => {
-  if (!validator(signinData.value)) return false
+  if (!validation(formData.value)) return false
 
-  signinUserMutation.mutate(
+  const { email, password } = formData.value
+
+  signinUserMutation(
     {
-      email: signinData.value.email.value,
-      password: signinData.value.password.value,
+      email: email.value,
+      password: password.value,
     },
     {
       onError: (error) => {
@@ -140,10 +125,10 @@ const signin = async () => {
           ? error.response.data.message
           : error.message
 
-        if (errorMessage.indexOf('пароль') >= 0) {
-          signinData.value.password.errors.push(errorMessage)
+        if (errorMessage.includes('пароль')) {
+          password.error.msg = errorMessage
         } else {
-          signinData.value.email.errors.push(errorMessage)
+          email.error.msg = errorMessage
         }
       },
       onSuccess: (data) => {
@@ -155,16 +140,20 @@ const signin = async () => {
   )
 }
 
-const signupUserMutation = useSignupUser()
+// TODO: refactor
+const { mutate: signupUserMutation, isPending: signupUserIsPending } =
+  useSignupUser()
 const signup = async () => {
-  if (!validator(signupData.value)) return false
+  if (!validation(formData.value)) return false
+
+  const { email, password, username, name } = formData.value
 
   signupUserMutation.mutate(
     {
-      email: signupData.value.email.value,
-      password: signupData.value.password.value,
-      username: signupData.value.username.value,
-      name: signupData.value.name.value,
+      email: email.value,
+      password: password.value,
+      username: username.value,
+      name: name.value,
     },
     {
       onError: (error) => {
@@ -173,16 +162,13 @@ const signup = async () => {
           : error.message
 
         if (errorMessage.indexOf('никнейм') >= 0) {
-          signupData.value.username.errors.push(errorMessage)
+          username.error.msg = errorMessage
         } else {
-          signupData.value.email.errors.push(errorMessage)
+          email.error.msg = errorMessage
         }
       },
       onSuccess: (data) => {
-        signinData.value.email.value = ''
-        signinData.value.email.errors = []
-        signinData.value.password.value = ''
-        signinData.value.password.errors = []
+        clearFormData(['email', 'password'], true)
         formState.value = 'signin'
       },
     },
@@ -198,112 +184,45 @@ const signup = async () => {
       <span>зарегистрируйтесь</span>
     </div>
     <form class="form">
-      <InputText
-        placeholder="Email"
-        type="text"
-        v-model="formData.email.value" />
-      <Password
-        v-model="formData.password.value"
-        placeholder="Пароль"
-        :feedback="false"
-        toggleMask />
-    </form>
-    <div class="buttons">
-      <Button label="Регистрация" />
-      <Button label="Вход" />
-    </div>
-    <!-- <div class="form-wrap">
-      <div class="title h1">
-        <span
-          :class="[formState === 'signin' ? 'title-active' : 'title-inactive']">
-          Войдите
-        </span>
-        <span class="title-separator">или</span>
-        <span
-          :class="[formState === 'signup' ? 'title-active' : 'title-inactive']">
-          зарегистрируйтесь
-        </span>
+      <label class="field">
+        <InputText
+          v-model="formData.email.value"
+          @focus="clearFormData('email')"
+          :invalid="formData.email.error.exists"
+          placeholder="Email"
+          type="text" />
+        <Message
+          class="field__error"
+          severity="error"
+          v-if="formData.email.error.exists">
+          {{ formData.email.error.msg }}
+        </Message>
+      </label>
+      <label class="field">
+        <Password
+          v-model="formData.password.value"
+          @focus="clearFormData('password')"
+          :invalid="formData.password.error.exists"
+          placeholder="Пароль"
+          :feedback="false"
+          toggleMask />
+        <Message
+          class="field__error"
+          severity="error"
+          v-if="formData.password.error.exists">
+          {{ formData.password.error.msg }}
+        </Message>
+      </label>
+      <div class="buttons">
+        <Button label="Регистрация" outlined />
+        <Button
+          label="Вход"
+          outlined
+          type="submit"
+          @click.prevent="signin"
+          :loding="signinUserIsPending" />
       </div>
-      <Transition name="blur" mode="out-in">
-        <form v-if="formState === 'signin'" class="form" key="signin">
-          <div class="inputs">
-            <InputText
-              v-model="signinData.email.value"
-              placeholder="Email"
-              type="text"
-              variant="filled" />
-            <Password
-              v-model="signinData.password.value"
-              placeholder="Пароль"
-              :feedback="false"
-              variant="filled"
-              toggleMask />
-
-            <AppInput
-              v-model="signinData.email.value"
-              v-model:errors="signinData.email.errors"
-              placeholder="Email" />
-            <AppInput
-              v-model="signinData.password.value"
-              v-model:errors="signinData.password.errors"
-              type="password"
-              placeholder="Пароль" />
-          </div>
-          <div class="buttons">
-            <Button label="Регистрация" raised />
-            <Button label="Вход" raised />
-            <AppButton
-              class="signup-button"
-              title="Регистрация"
-              styleType="inline"
-              @click="changeForm" />
-            <AppButton
-              class="signin-button"
-              title="Вход"
-              type="submit"
-              @click="signin" />
-          </div>
-        </form>
-        <form v-else-if="formState === 'signup'" class="form" key="signun">
-          <div class="inputs">
-            <AppInput
-              v-model="signupData.email.value"
-              v-model:errors="signupData.email.errors"
-              placeholder="Email" />
-            <AppInput
-              v-model="signupData.password.value"
-              v-model:errors="signupData.password.errors"
-              type="password"
-              placeholder="Пароль" />
-            <AppInput
-              v-model="signupData.passwordConfirm.value"
-              v-model:errors="signupData.passwordConfirm.errors"
-              type="password"
-              placeholder="Пароль еще раз" />
-            <AppInput
-              v-model="signupData.username.value"
-              v-model:errors="signupData.username.errors"
-              placeholder="Никнейм" />
-            <AppInput
-              v-model="signupData.name.value"
-              v-model:errors="signupData.name.errors"
-              placeholder="Ваше имя" />
-          </div>
-          <div class="buttons">
-            <AppButton
-              class="signin-button"
-              title="Назад"
-              styleType="inline"
-              @click="changeForm" />
-            <AppButton
-              class="signup-button"
-              type="submit"
-              title="Отправить"
-              @click="signup" />
-          </div>
-        </form>
-      </Transition>
-    </div> -->
+    </form>
   </div>
 </template>
 
@@ -312,7 +231,12 @@ const signup = async () => {
   display: flex
   flex-direction: column
   gap: $size-40
+  width: 90%
+  max-width: 40rem
   padding: $size-40
+  border-radius: var(--p-border-radius-xl)
+  background: var(--p-surface-800)
+  box-shadow: 0 0 20rem var(--p-primary-800), inset 0 0 10rem color-mix(in srgb, var(--p-primary-800), transparent 70%)
   .title
     display: flex
     flex-wrap: wrap
@@ -324,10 +248,19 @@ const signup = async () => {
     display: flex
     flex-direction: column
     gap: $size-20
+    .field
+      position: relative
+      display: flex
+      &__error
+        position: absolute
+        inset: 0
+        cursor: pointer
   .buttons
-    display: flex
-    justify-content: space-between
+    display: grid
+    grid-auto-flow: row
+    grid-template-columns: repeat(2, 1fr)
     gap: $size-20
+    margin-top: $size-20
 
 
 

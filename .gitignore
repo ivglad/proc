@@ -7,3 +7,5 @@ services/*/logs/*
 
 *package-lock.json
 *pnpm-lock.yaml
+
+*dev-dist

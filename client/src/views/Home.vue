@@ -1,19 +1,4 @@
-<script setup>
-import { useGetUsers } from '@/helpers/queries'
-
-components: {
-}
-
-const getUsersMutation = useGetUsers()
-getUsersMutation.mutate({
-  onError: (error) => {
-    console.log('getUsersMutation onError', error)
-  },
-  onSuccess: (data) => {
-    console.log('getUsersMutation onSuccess', data)
-  },
-})
-</script>
+<script setup></script>
 
 <template>
   <div class="home"></div>

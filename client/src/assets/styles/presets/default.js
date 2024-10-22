@@ -1,4 +1,4 @@
-import { definePreset } from '@primevue/themes'
+import { definePreset, $dt } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
 
 const Preset = definePreset(Aura, {
@@ -9,7 +9,7 @@ const Preset = definePreset(Aura, {
       sm: '4px',
       md: '6px',
       lg: '8px',
-      xl: '12px',
+      xl: '14px',
     },
     emerald: {
       50: '#ecfdf5',
@@ -18,11 +18,11 @@ const Preset = definePreset(Aura, {
       300: '#6ee7b7',
       400: '#34d399',
       500: '#10b981',
-      600: '#059669',
-      700: '#047857',
-      800: '#065f46',
-      900: '#064e3b',
-      950: '#022c22',
+      600: '#059666',
+      700: '#0a7954',
+      800: '#0d5f44',
+      900: '#1e4938',
+      950: '#022c1e',
     },
     green: {
       50: '#f0fdf4',
@@ -51,17 +51,17 @@ const Preset = definePreset(Aura, {
       950: '#1a2e05',
     },
     red: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#ef4444',
-      600: '#dc2626',
-      700: '#b91c1c',
-      800: '#991b1b',
-      900: '#7f1d1d',
-      950: '#450a0a',
+      50: '#f7efef',
+      100: '#f5e5e5',
+      200: '#f7cdcd',
+      300: '#eea3a3',
+      400: '#f07777',
+      500: '#eb5454',
+      600: '#d44040',
+      700: '#b93232',
+      800: '#992c2c',
+      900: '#802929',
+      950: '#411212',
     },
     orange: {
       50: '#fff7ed',
@@ -280,7 +280,9 @@ const Preset = definePreset(Aura, {
       500: '#737373',
       600: '#525252',
       700: '#404040',
+      750: '#343434',
       800: '#262626',
+      850: '#222222',
       900: '#171717',
       950: '#0a0a0a',
     },
@@ -308,24 +310,24 @@ const Preset = definePreset(Aura, {
       shadow: 'none',
     },
     disabledOpacity: '0.6',
-    iconSize: '1rem',
+    iconSize: '1.4rem',
     anchorGutter: '2px',
     primary: {
-      50: '{green.50}',
-      100: '{green.100}',
-      200: '{green.200}',
-      300: '{green.300}',
-      400: '{green.400}',
-      500: '{green.500}',
-      600: '{green.600}',
-      700: '{green.700}',
-      800: '{green.800}',
-      900: '{green.900}',
-      950: '{green.950}',
+      50: '{emerald.50}',
+      100: '{emerald.100}',
+      200: '{emerald.200}',
+      300: '{emerald.300}',
+      400: '{emerald.400}',
+      500: '{emerald.500}',
+      600: '{emerald.600}',
+      700: '{emerald.700}',
+      800: '{emerald.800}',
+      900: '{emerald.900}',
+      950: '{emerald.950}',
     },
     formField: {
-      paddingX: '0.75rem',
-      paddingY: '0.5rem',
+      paddingX: '1.2rem',
+      paddingY: '1rem',
       borderRadius: '{border.radius.xl}',
       focusRing: {
         width: '0',
@@ -335,16 +337,6 @@ const Preset = definePreset(Aura, {
         shadow: 'none',
       },
       transitionDuration: '{transition.duration}',
-      extend: {
-        root: {
-          modifiedFontSize: '1.4rem',
-        },
-      },
-      css: ({ dt }) => `
-        .p-component {
-          font-size: ${dt.modifiedFontSize};
-        }
-      `,
     },
     list: {
       padding: '0.25rem 0.25rem',
@@ -354,7 +346,7 @@ const Preset = definePreset(Aura, {
       },
       option: {
         padding: '0.5rem 0.75rem',
-        borderRadius: '{border.radius.sm}',
+        borderRadius: '{border.radius.xl}',
       },
       optionGroup: {
         padding: '0.5rem 0.75rem',
@@ -362,7 +354,7 @@ const Preset = definePreset(Aura, {
       },
     },
     content: {
-      borderRadius: '{border.radius.md}',
+      borderRadius: '{border.radius.xl}',
     },
     mask: {
       transitionDuration: '0.15s',
@@ -374,7 +366,7 @@ const Preset = definePreset(Aura, {
       },
       item: {
         padding: '0.5rem 0.75rem',
-        borderRadius: '{border.radius.sm}',
+        borderRadius: '{border.radius.xl}',
         gap: '0.5rem',
       },
       submenuLabel: {
@@ -387,12 +379,12 @@ const Preset = definePreset(Aura, {
     },
     overlay: {
       select: {
-        borderRadius: '{border.radius.md}',
+        borderRadius: '{border.radius.xl}',
         shadow:
           '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
       },
       popover: {
-        borderRadius: '{border.radius.md}',
+        borderRadius: '{border.radius.xl}',
         padding: '0.75rem',
         shadow:
           '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
@@ -534,17 +526,20 @@ const Preset = definePreset(Aura, {
       dark: {
         surface: {
           0: '#ffffff',
-          50: '{zinc.50}',
-          100: '{zinc.100}',
-          200: '{zinc.200}',
-          300: '{zinc.300}',
-          400: '{zinc.400}',
-          500: '{zinc.500}',
-          600: '{zinc.600}',
-          700: '{zinc.700}',
-          800: '{zinc.800}',
-          900: '{zinc.900}',
-          950: '{zinc.950}',
+          50: '{neutral.50}',
+          100: '{neutral.100}',
+          200: '{neutral.200}',
+          300: '{neutral.300}',
+          400: '{neutral.400}',
+          500: '{neutral.500}',
+          600: '{neutral.600}',
+          700: '{neutral.700}',
+          750: '{neutral.750}',
+          800: '{neutral.800}',
+          850: '{neutral.850}',
+          900: '{neutral.900}',
+          950: '{neutral.950}',
+          1000: '#222222',
         },
         primary: {
           color: '{primary.400}',
@@ -563,26 +558,26 @@ const Preset = definePreset(Aura, {
           color: '{surface.200}',
         },
         formField: {
-          background: '{surface.950}',
+          background: '{surface.850}',
           disabledBackground: '{surface.700}',
           filledBackground: '{surface.800}',
           filledFocusBackground: '{surface.800}',
-          borderColor: '{surface.700}',
+          borderColor: '{surface.750}',
           hoverBorderColor: '{surface.600}',
           focusBorderColor: '{primary.color}',
           invalidBorderColor: '{red.300}',
-          color: '{surface.0}',
+          color: '{surface.200}',
           disabledColor: '{surface.400}',
           placeholderColor: '{surface.400}',
           floatLabelColor: '{surface.400}',
           floatLabelFocusColor: '{surface.400}',
           floatLabelInvalidColor: '{red.300}',
-          iconColor: '{surface.400}',
+          iconColor: '{surface.500}',
           shadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgba(18, 18, 23, 0.05)',
         },
         text: {
-          color: '{surface.0}',
-          hoverColor: '{surface.0}',
+          color: '{surface.200}',
+          hoverColor: '{surface.200}',
           mutedColor: '{surface.400}',
           hoverMutedColor: '{surface.300}',
         },
@@ -656,7 +651,28 @@ const Preset = definePreset(Aura, {
     },
   },
   components: {
-    // ... components
+    button: {
+      paddingX: '2rem',
+      colorScheme: {
+        dark: {
+          outlined: {
+            primary: {
+              borderColor: '{surface.750}',
+              color: '{primary.color}',
+            },
+          },
+        },
+      },
+    },
+    message: {
+      colorScheme: {
+        dark: {
+          error: {
+            borderColor: '{red.800}',
+          },
+        },
+      },
+    },
   },
 })
 

@@ -1,0 +1,26 @@
+@layer default
+  .p-button
+    min-width: min-content
+    font-size: inherit
+    padding-top: 0.95rem
+    padding-bottom: 1.05rem
+  .p-button-label
+    font-size: 1.2rem
+    text-transform: uppercase
+  .p-button-outlined:not(:disabled):hover
+    border-color: var(--p-primary-600)
+  .p-button-outlined:not(:disabled):active
+    border-color: var(--p-primary-400)
+
+  .p-password
+    display: flex
+    width: 100%
+
+  .p-inputtext
+    font-size: inherit
+
+  .p-message
+    backdrop-filter: blur(20px)
+
+  ::selection
+    background: color-mix(in srgb, var(--p-primary-400), transparent 84%)

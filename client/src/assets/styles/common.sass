@@ -1,8 +1,5 @@
-@use '@/assets/styles/colors' as *
 @use '@/assets/styles/fonts' as *
 @use '@/assets/styles/animations' as *
-
-
 
 // // Offsets
 @for $i from 0 through 120
@@ -81,22 +78,22 @@ $size-120: 12rem
 
 // $controlPanelHeight: 72px
 
-// // Active element
-// @mixin active()
-//   @media (hover: none)
-//     @include transition
-//     -webkit-tap-highlight-color: transparent
-//     &:active,
-//     &:focus
-//       @include transition-enter
-//       @content
-//   @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
-//     @include transition
-//     cursor: pointer
-//     &:hover,
-//     &:focus-visible
-//       @include transition-enter
-//       @content
+// Active element
+@mixin active()
+  @media (hover: none)
+    @include transition
+    -webkit-tap-highlight-color: transparent
+    &:active,
+    &:focus
+      @include transition-enter
+      @content
+  @media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active)
+    @include transition
+    cursor: pointer
+    &:hover,
+    &:focus-visible
+      @include transition-enter
+      @content
 
 // Media query
 @mixin mq($size)
@@ -196,7 +193,8 @@ $size-120: 12rem
 //     border: 1px solid $border-color-error
 
 // ::selection
-//   background: $select-color
+//   background: var(--p-primary-500)
+//   filter: contrast(10)
 
 // *::-webkit-scrollbar
 //   width: 4px
@@ -209,17 +207,21 @@ $size-120: 12rem
 //   // scrollbar-width: thin
 //   scrollbar-color: $border-color-default
 
-button,
-input,
-textarea
-  // @include font-base(1.4rem)
-  width: 100%
-button
-  text-wrap: nowrap
+// .p-component
+//   font-size: inherit !important
 
 //   &:-internal-autofill-selected
 //     // color: inherit !important
 //     // background-color: transparent !important
+
+button,
+input,
+textarea
+  @include font-base(1.4rem)
+button
+  text-wrap: nowrap
+input
+  width: 100%
 
 picture
   display: block

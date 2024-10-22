@@ -11,9 +11,6 @@ const routes = [
     path: '/',
     name: 'Главная',
     component: () => import('@/views/Home.vue'),
-    meta: {
-      roles: ['creator'],
-    },
   },
   {
     path: '/auth',
@@ -26,38 +23,6 @@ const routes = [
     component: () => import('@/views/Ui.vue'),
     meta: {
       roles: ['creator'],
-    },
-  },
-  {
-    path: '/vip',
-    name: 'Vip',
-    component: () => import('@/views/Vip.vue'),
-    meta: {
-      roles: ['admin', 'vip', 'spectator'],
-    },
-  },
-  {
-    path: '/vip/movies',
-    name: 'VipMovies',
-    component: () => import('@/views/VipMovies.vue'),
-    meta: {
-      roles: ['admin', 'vip', 'spectator'],
-    },
-  },
-  {
-    path: '/vip/movies/:id/play',
-    name: 'VipMoviePlay',
-    component: () => import('@/components/VipMoviePlay.vue'),
-    meta: {
-      roles: ['admin', 'vip'],
-    },
-  },
-  {
-    path: '/vip/products',
-    name: 'VipProducts',
-    component: () => import('@/views/VipProducts.vue'),
-    meta: {
-      roles: ['admin', 'vip', 'spectator'],
     },
   },
 ]
@@ -134,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.onError((e) => {
-  console.log('router.onError', e)
+  console.log('router error', e)
 })
 
 export default router

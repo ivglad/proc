@@ -17,10 +17,10 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const setUserHomePage = () => {
-    if (user.value.role === 'spectator') user.value.homePage = '/vip'
-    else if (user.value.role === 'vip') user.value.homePage = '/vip'
-    else if (user.value.role === 'admin') user.value.homePage = '/vip'
-    else user.value.homePage = '/vip'
+    if (user.value.role === 'spectator') user.value.homePage = '/'
+    else if (user.value.role === 'vip') user.value.homePage = '/'
+    else if (user.value.role === 'admin') user.value.homePage = '/'
+    else user.value.homePage = '/'
   }
 
   const initUser = (data) => {
